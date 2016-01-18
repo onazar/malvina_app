@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  belongs_to :clients, dependent: :destroy
+  belongs_to :client, dependent: :destroy
 
   has_many :ordered_parts, dependent: :destroy
 
