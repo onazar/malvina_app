@@ -1,0 +1,25 @@
+<h1>Part types</h1>
+
+<table>
+  <tr>
+    <th>id</th>
+    <th>part type</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @part_types.each do |pt| %>
+      <tr>
+        <td><%= pt.id %></td>
+        <td><%= pt.type_name %></td>
+        <td><%= link_to 'Show', pt %></td>
+        <td><%= link_to 'Edit', edit_part_type_path(pt) %></td>
+
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Part type', new_part_type_path %>
