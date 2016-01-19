@@ -21,6 +21,9 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'rb-readline'
 
+# Build calendar
+gem "watu_table_builder", :require => "table_builder"
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

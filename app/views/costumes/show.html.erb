@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Costume:</strong>
+  <%= @costume.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @costume.description %>
+</p>
+
+<p>
+  <strong>Parts:</strong>
+  <%= @costume.parts.map {|p| p.name}%>
+</p>
+
+<%= link_to 'Edit', edit_costume_path(@costume) %> |
+<%= link_to 'Back', costumes_path %>
