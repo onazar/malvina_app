@@ -1,0 +1,29 @@
+<h1>Listing costumes</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Parts</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @costumes.each do |cst| %>
+    <tr>
+      <td><%= cst.id %></td>
+      <td><%= cst.name %></td>
+      <td><%= cst.description %></td>
+      <td><%= cst.parts.map {|p| p.name} %></td>
+      <td><%= link_to 'Show', cst %></td>
+      <td><%= link_to 'Edit', edit_costume_path(cst) %></td>
+
+    </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Costume', new_costume_path %>
