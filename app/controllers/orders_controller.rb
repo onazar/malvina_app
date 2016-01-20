@@ -8,6 +8,10 @@ class OrdersController < ApplicationController
   def show
   end
 
+  def search
+    @orders = Order.all.where(:date => params[:date])
+  end
+
   def new
     @order = Order.new
   end
