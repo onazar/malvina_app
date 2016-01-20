@@ -1,0 +1,26 @@
+<h1>Sample App</h1>
+<p>
+  This is the home page.
+</p>
+
+<div id="calendar">
+  <h2 id="month">
+    <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
+    <%=h @date.strftime("%B %Y") %>
+    <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m") %>
+  </h2>
+  <%= calendar_for @orders, :year => @date.year, :month => @date.month, :first_day_of_week => 1 do |calendar| %>
+    <%= calendar.head('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') %>
+    <% calendar.day(:day_method => :date) do |date, orders| %>
+      <%= date.day %>
+      <ul><%= link_to h(orders.length), search_orders_path(:date => date)%></ul>
+      <ul>
+        <% for order in orders %>
+          <li><%= link_to h(order.id), order %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</div>
+
+

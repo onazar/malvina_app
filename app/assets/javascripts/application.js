@@ -14,3 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(function() {
+  $("#order_date").datepicker({
+    dateFormat: 'yy-mm-dd'
+  });
+});
