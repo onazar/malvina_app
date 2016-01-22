@@ -1,21 +1,29 @@
-<h1>Listing orders</h1>
+<h1>Listing Clients <%= @action %></h1>
 
 <table>
   <tr>
     <th>Id</th>
     <th>Date</th>
+    <th>Days in rent</th>
+    <th>Return Date</th>
     <th>Order type</th>
-    <th>Name</th>
-    <th>Client</th>
+    <th>Order Name</th>
+    <th>Client name</th>
+    <th>Client phone</th>
+    <th></th>
   </tr>
 
   <% @orders.each do |ord| %>
     <tr>
       <td><%= ord.id %></td>
       <td><%= ord.date %></td>
+      <td><%= ord.days_in_rent %></td>
+      <td><%= ord.return_date %></td>
       <td><%= ord.order_type %></td>
       <td><%= ord.name %></td>
-      <td><%= ord.client.name %></td>
+      <td><%= ord.client_name %></td>
+      <td><%= ord.client_phone %></td>
+      <td><%= link_to 'Edit', edit_order_path(ord) %></td>
     </tr>
   <% end %>
 </table>
@@ -23,3 +31,6 @@
 <br />
 
 <%= link_to 'Home', '/' %>
+<% if @new_ord %>
+  <%= link_to 'New Order', new_order_path(:chosen_date => params[:date]) %>
+<% end %>

@@ -11,14 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160112112903) do
-
-  create_table "clients", force: :cascade do |t|
-    t.string   "name"
-    t.string   "phone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+ActiveRecord::Schema.define(version: 20160122094300) do
 
   create_table "costumes", force: :cascade do |t|
     t.string   "name"
@@ -41,11 +34,15 @@ ActiveRecord::Schema.define(version: 20160112112903) do
 
   create_table "orders", force: :cascade do |t|
     t.date     "date"
-    t.integer  "order_type", default: 0
+    t.integer  "order_type",   default: 0
     t.string   "name"
     t.integer  "client_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.date     "return_date"
+    t.string   "client_name"
+    t.string   "client_phone"
+    t.integer  "days_in_rent"
   end
 
   create_table "part_types", force: :cascade do |t|
