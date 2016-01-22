@@ -11,19 +11,34 @@
 </p>
 
 <p>
+  <strong>Days in rent:</strong>
+  <%= @order.days_in_rent %>
+</p>
+
+<p>
+  <strong>Return date:</strong>
+  <%= @order.return_date %>
+</p>
+
+<p>
   <strong>Order type:</strong>
   <%= @order.order_type %>
 </p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Order Name:</strong>
   <%= @order.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
-  <%= @order.client.name %>
+  <strong>Client name:</strong>
+  <%= @order.client_name %>
 </p>
 
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+<p>
+  <strong>Client phone:</strong>
+  <%= @order.client_phone %>
+</p>
+
+<%= link_to 'Edit', edit_order_path(@order) %>
+<%= link_to 'Home', '/' %>

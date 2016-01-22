@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   #get 'static_pages/home'
   match '/', to: 'static_pages#home', via: 'get'
 
-  resources :clients
   resources :part_types
   resources :parts
   resources :costumes

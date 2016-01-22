@@ -13,7 +13,20 @@
 
   <div class="field">
     <%= f.label :date %><br>
-    <%= f.date_select :date %>
+    <% if @chosen_date.nil? %>
+      <%= f.date_select :date, default: @order.date %>
+    <% else%>
+      <%= f.date_select :date, default: @chosen_date.to_date %>
+    <% end%>
+  </div>
+  <div class="field">
+    <%= f.label :days_in_rent %><br>
+    <% if @order.days_in_rent.nil? %>
+      <%= f.number_field :days_in_rent, min: 1, step: 1, value: 1 %>
+    <% else%>
+      <%= f.number_field :days_in_rent, min: 1, step: 1, value: @order.days_in_rent %>
+    <% end%>
+
   </div>
   <div class="field">
     <%= f.label :order_type %><br>
@@ -24,8 +37,12 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :client_id %><br>
-    <%= f.collection_select :client_id, Client.order(:id),:id, :name, :prompt => "Select client" %>
+    <%= f.label :client_name %><br>
+    <%= f.text_field :client_name %>
+  </div>
+  <div class="field">
+    <%= f.label :client_phone %><br>
+    <%= f.text_field :client_phone %>
   </div>
   <div class="actions">
     <%= f.submit %>
