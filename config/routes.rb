@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   resources :part_types
   resources :parts
-  resources :costumes
+  resources :costumes do
+    get 'costume_names', :on => :collection
+    get 'costume_parts', :on => :collection
+  end
 
   resources :orders do
     get 'search', :on => :collection

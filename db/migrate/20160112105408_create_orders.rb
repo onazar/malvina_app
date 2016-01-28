@@ -4,7 +4,6 @@ class CreateOrders < ActiveRecord::Migration
       t.date :date
       t.integer :order_type, default: 0
       t.string :name
-      t.integer :client_id
 
       t.timestamps null: false
     end

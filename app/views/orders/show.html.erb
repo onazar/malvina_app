@@ -31,6 +31,11 @@
 </p>
 
 <p>
+  <strong>Order Parts:</strong>
+  <%= @order.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %>
+</p>
+
+<p>
   <strong>Client name:</strong>
   <%= @order.client_name %>
 </p>
