@@ -35,14 +35,14 @@ class CostumesController < ApplicationController
     puts "--ret_date---> #{ret_date}"
 
     order_ids = Order.where("date >= ? AND date < ?", ord_date, ret_date).pluck(:id)
-    ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten!
+    ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
 
     puts "--order_ids---> #{order_ids}"
     puts "--ordered_parts---> #{ordered_parts}"
 
     if params[:costume_name]
       cst_id = Costume.where(name: params[:costume_name]).pluck(:id)[0]
-      Costume.find(cst_id).parts.where("id NOT IN (?)", ordered_parts).group_by(&:part_type_id).each do |t_id, cst_prts|
+      Costume.find(cst_id).parts.where("id NOT IN (?)", ordered_parts.empty? ? [0] : ordered_parts).group_by(&:part_type_id).each do |t_id, cst_prts|
         puts "--cst_prts---> #{cst_prts}"
         parts[PartType.find(t_id).type_name] = cst_prts.map {|p| p.id.to_s + ' ' + p.name + ' ' + p.description}
       end
