@@ -28,10 +28,37 @@
     <% end%>
 
   </div>
-  <div class="field">
+  <div id="ord_type_div", class="field">
     <%= f.label :order_type %><br>
+    <%# Order.order_types.keys.each do |ord_t| %>
+      <%#= f.radio_button :order_type, ord_t %>
+      <%#= f.label ord_t.to_sym %>
+    <%# end %>
     <%= f.select :order_type, Order.order_types.keys %>
   </div>
+
+  <% if @already_ord_parts %>
+    <div id="div_ordered_parts">
+      <h2>Already ordered parts</h2>
+      <% @already_ord_parts.each do |p_type, p_list| %>
+        <h3><%= p_type %></h3>
+        <ul>
+          <% p_list.each do |p| %>
+            <li><%= p %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+
+  <input type="text" id="rb_search" placeholder="Type to search", autocomplete="off">
+
+  <div id="div_cst_names"></div>
+  <div id="div_cst_parts"></div>
+  <div id="div_selected_parts"></div>
+
+  <%= hidden_field_tag 'sel_parts' %>
+
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -45,6 +72,110 @@
     <%= f.text_field :client_phone %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit disabled: true %>
   </div>
+<% end %>
+
+
+<%= javascript_tag do %>
+  $(document).on("keyup", '#rb_search', function() {
+    $.ajax({
+      url: "<%= costume_names_costumes_path %>",
+      type: "GET",
+      dataType: "json",
+      data: { name_pattern: $(this).val() },
+      complete: function() {},
+      success: function(data, textStatus, xhr) {
+        // Do something with the response here
+        PrepareCostumesLi(data);
+      },
+      error: function() {
+          alert("Ajax error!")
+      }
+    });
+  });
+
+  function PrepareCostumesLi(data) {
+    var items = [];
+    $.each(data.costumes_by_names, function(index, value) {
+      items.push("<li>" + value + "</li>");
+    });
+    $("#div_cst_names").html($("<ul/>", {html: items.join("")}));
+
+    if (items.length == 0) {
+      $("#div_cst_parts").html("");
+      $("#div_selected_parts").html("");
+      $("#sel_parts").attr("value", "");
+    }
+  }
+
+  $(document).on("click", '#div_cst_names ul li', function() {
+    $.ajax({
+      url: "<%= costume_parts_costumes_path %>",
+      type: "GET",
+      dataType: "json",
+      data: { costume_name: $(this).text(),
+              rent_days: $("#order_days_in_rent").val(),
+              ord_date: [$("#order_date_1i").find("[selected='selected']").val(),
+                         $("#order_date_2i").find("[selected='selected']").val(),
+                         $("#order_date_3i").find("[selected='selected']").val()]
+            },
+      complete: function() {},
+      success: function(data, textStatus, xhr) {
+        // Do something with the response here
+        PrepareCostumeParts(data);
+      },
+      error: function() {
+        alert("Ajax error!")
+      }
+    });
+  });
+
+  function PrepareCostumeParts(data) {
+    var items = [];
+    $.each(data.parts_for_costume, function(p_type, parts) {
+      items.push("<h3>" + p_type + "</h3>");
+      items.push("<ul>");
+      $.each(parts, function(index, value) {
+        items.push("<li>" + value + "</li>");
+      });
+      items.push("</ul>");
+    });
+
+    if (items.length == 0) {
+      $("#div_cst_parts").html("No free parts for rent!!!");
+    } else {
+      $("#div_cst_parts").html(items.join(""));
+    }
+  }
+
+<% end%>
+
+
+<%= javascript_tag do %>
+  $(document).on("click", '#div_cst_parts ul li', function() {
+    var selectedParts = []
+    $(this).toggleClass('selected');
+    $("#div_cst_parts ul li.selected").each(function(index, li) {
+      selectedParts.push($(li).text());
+    });
+    $("#div_selected_parts").html(selectedParts.join(" ")).trigger("contentchange");
+    $("#sel_parts").attr("value", JSON.stringify(selectedParts));
+  });
+<% end%>
+
+
+<%= javascript_tag do %>
+  $("#div_selected_parts").bind("contentchange", function() {
+    var empty = false;
+    if ($("#div_selected_parts").text().length == 0) {
+      empty = true;
+    }
+
+    if (empty) {
+      $('.actions input').attr('disabled', 'disabled');
+    } else {
+      $('.actions input').removeAttr('disabled');
+    }
+  });
 <% end %>

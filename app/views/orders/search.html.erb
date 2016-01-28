@@ -1,6 +1,7 @@
 <h1>Listing Clients <%= @action %></h1>
 
-<table>
+<input type="text" id="search" placeholder="Type to search">
+<table id="s_table">
   <tr>
     <th>Id</th>
     <th>Date</th>
@@ -8,8 +9,10 @@
     <th>Return Date</th>
     <th>Order type</th>
     <th>Order Name</th>
+    <th>Order parts</th>
     <th>Client name</th>
     <th>Client phone</th>
+    <th></th>
     <th></th>
   </tr>
 
@@ -21,9 +24,11 @@
       <td><%= ord.return_date %></td>
       <td><%= ord.order_type %></td>
       <td><%= ord.name %></td>
+      <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
       <td><%= ord.client_name %></td>
       <td><%= ord.client_phone %></td>
       <td><%= link_to 'Edit', edit_order_path(ord) %></td>
+      <td><%= link_to 'Destroy', ord, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     </tr>
   <% end %>
 </table>
@@ -34,3 +39,15 @@
 <% if @new_ord %>
   <%= link_to 'New Order', new_order_path(:chosen_date => params[:date]) %>
 <% end %>
+
+<%= javascript_tag do %>
+  var $rows = $('#s_table tr');
+  $('#search').keyup(function() {
+  var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+  $rows.show().filter(function() {
+  var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+  return !~text.indexOf(val);
+  }).hide();
+  });
+<% end%>
