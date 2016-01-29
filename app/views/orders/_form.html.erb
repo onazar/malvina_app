@@ -13,12 +13,20 @@
 
   <div class="field">
     <%= f.label :date %><br>
-    <% if @chosen_date.nil? %>
+    <%# if @chosen_date.nil? %>
+      <%#= f.date_select :date, selected: @order.date%>
+    <%# else%>
+      <%#= f.date_select :date, default: @chosen_date.to_date %>
+    <%# end%>
+    <% if @chosen_date.nil? and @order.date.nil? %>
+      <%= f.date_select :date, default: Date.today %>
+    <% elsif @chosen_date.nil? %>
       <%= f.date_select :date, default: @order.date %>
-    <% else%>
+    <% else %>
       <%= f.date_select :date, default: @chosen_date.to_date %>
-    <% end%>
+    <% end %>
   </div>
+
   <div class="field">
     <%= f.label :days_in_rent %><br>
     <% if @order.days_in_rent.nil? %>
@@ -30,13 +38,18 @@
   </div>
   <div id="ord_type_div", class="field">
     <%= f.label :order_type %><br>
-    <%# Order.order_types.keys.each do |ord_t| %>
-      <%#= f.radio_button :order_type, ord_t %>
-      <%#= f.label ord_t.to_sym %>
-    <%# end %>
-    <%= f.select :order_type, Order.order_types.keys %>
+    <% Order.order_types.keys.each do |ord_t| %>
+      <%= f.radio_button :order_type, ord_t %>
+      <%= f.label ord_t.to_sym %>
+    <% end %>
+    <%#= f.select :order_type, Order.order_types.keys %>
+    <!--# Choose search criteria (id or name pattern).-->
+    </br>
+    <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Id</label>
+    <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Name</label>
   </div>
 
+  <!--# Show already chosen parts-->
   <% if @already_ord_parts %>
     <div id="div_ordered_parts">
       <h2>Already ordered parts</h2>
@@ -51,7 +64,7 @@
     </div>
   <% end %>
 
-  <input type="text" id="rb_search" placeholder="Type to search", autocomplete="off">
+  <input type="text" id="rb_search" placeholder="Type to search" autocomplete="off">
 
   <div id="div_cst_names"></div>
   <div id="div_cst_parts"></div>
@@ -71,19 +84,43 @@
     <%= f.label :client_phone %><br>
     <%= f.text_field :client_phone %>
   </div>
+  <div class="field">
+    <%= f.label :tbd %><br>
+    <%= f.text_field :tbd %>
+  </div>
   <div class="actions">
     <%= f.submit disabled: true %>
   </div>
 <% end %>
 
+<%= javascript_tag do %>
+  function setSearchUrl() {
+    if (document.getElementById("order_order_type_costume").checked == true) {
+      return "<%= costume_names_costumes_path %>";
+    } else if (document.getElementById("order_order_type_part").checked == true) {
+      return "<%= costume_names_costumes_path %>";
+    }
+  }
+
+  function dataSearchByAttr(val) {
+    if (document.getElementById("item_id").checked == true) {
+      return { id_pattern: (val.length == 0) ? "" : val };
+    } else if (document.getElementById("item_name").checked == true) {
+      return { name_pattern: (val.length == 0) ? "" : val };
+    }
+  }
+<% end %>
+
 
 <%= javascript_tag do %>
   $(document).on("keyup", '#rb_search', function() {
+    lockDateInstruments();
+
     $.ajax({
-      url: "<%= costume_names_costumes_path %>",
+      url: setSearchUrl(),
       type: "GET",
       dataType: "json",
-      data: { name_pattern: $(this).val() },
+      data: dataSearchByAttr($(this).val()),
       complete: function() {},
       success: function(data, textStatus, xhr) {
         // Do something with the response here
@@ -97,7 +134,7 @@
 
   function PrepareCostumesLi(data) {
     var items = [];
-    $.each(data.costumes_by_names, function(index, value) {
+    $.each(data.cst_names, function(index, value) {
       items.push("<li>" + value + "</li>");
     });
     $("#div_cst_names").html($("<ul/>", {html: items.join("")}));
@@ -116,9 +153,9 @@
       dataType: "json",
       data: { costume_name: $(this).text(),
               rent_days: $("#order_days_in_rent").val(),
-              ord_date: [$("#order_date_1i").find("[selected='selected']").val(),
-                         $("#order_date_2i").find("[selected='selected']").val(),
-                         $("#order_date_3i").find("[selected='selected']").val()]
+              ord_date: [$("#order_date_1i").val(),
+                         $("#order_date_2i").val(),
+                         $("#order_date_3i").val()]
             },
       complete: function() {},
       success: function(data, textStatus, xhr) {
@@ -149,7 +186,7 @@
     }
   }
 
-<% end%>
+<% end %>
 
 
 <%= javascript_tag do %>
@@ -162,7 +199,7 @@
     $("#div_selected_parts").html(selectedParts.join(" ")).trigger("contentchange");
     $("#sel_parts").attr("value", JSON.stringify(selectedParts));
   });
-<% end%>
+<% end %>
 
 
 <%= javascript_tag do %>
@@ -178,4 +215,25 @@
       $('.actions input').removeAttr('disabled');
     }
   });
+<% end %>
+
+<%= javascript_tag do %>
+  function lockDateInstruments() {
+    var lock = false;
+    if ($("#rb_search").val().length != 0) {
+      lock = true;
+    }
+
+    if (lock) {
+      $("#order_days_in_rent").attr('disabled', 'disabled');
+      $("#order_date_1i").attr('disabled', 'disabled');
+      $("#order_date_2i").attr('disabled', 'disabled');
+      $("#order_date_3i").attr('disabled', 'disabled');
+    } else {
+      $("#order_days_in_rent").removeAttr('disabled');
+      $("#order_date_1i").removeAttr('disabled');
+      $("#order_date_2i").removeAttr('disabled');
+      $("#order_date_3i").removeAttr('disabled');
+    }
+  }
 <% end %>
