@@ -16,32 +16,52 @@ class CostumesController < ApplicationController
   end
 
   def costume_names
-    costumes_by_names = []
-    if params[:name_pattern] != ""
-      costumes_by_names = Costume.where("name like ?", "%#{params[:name_pattern]}%").map {|n| n.name}
+    cst_names = []
+    puts "-----> #{params}"
+    if params.has_key?(:name_pattern) and params[:name_pattern] != ""
+      cst_names = Costume.where("name like ?", "%#{params[:name_pattern]}%").map {|n| n.name}
+    end
+
+    if params.has_key?(:id_pattern) and !(Integer(params[:id_pattern]) rescue nil).nil?
+      begin
+        cst_names = [Costume.find(params[:id_pattern].to_i).name]
+      rescue ActiveRecord::RecordNotFound
+        cst_names = []
+      end
     end
 
     if request.xhr?
-      render :json => { :costumes_by_names => costumes_by_names }
+      render :json => { :cst_names => cst_names }
     end
   end
 
   def costume_parts
-    parts = {}
     puts "-----> #{params}"
     ord_date = make_normal_date
     ret_date = set_return_date
     puts "--ord_date---> #{ord_date}"
     puts "--ret_date---> #{ret_date}"
 
-    order_ids = Order.where("date >= ? AND date < ?", ord_date, ret_date).pluck(:id)
+    # Schema how to guess if parts are booked for these dates
+    # 26.01---------28.01     28.01-------------31.01
+    #         27.01----------------------30.01  <----- Parts already booked for these dates
+    #         27.01------28.01           30.01--31.01
+
+    # Get order ids that match client dates
+    order_ids = Order.where("date <= ? AND return_date > ? OR date < ? AND return_date >= ?",
+                            ord_date, ord_date, ret_date, ret_date).pluck(:id)
+    # Get booked parts for clients dates
     ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
 
     puts "--order_ids---> #{order_ids}"
     puts "--ordered_parts---> #{ordered_parts}"
 
+    parts = {}
     if params[:costume_name]
+      # Get costume id by its name
       cst_id = Costume.where(name: params[:costume_name]).pluck(:id)[0]
+
+      # Get available costume parts for client dates and group them by part types.
       Costume.find(cst_id).parts.where("id NOT IN (?)", ordered_parts.empty? ? [0] : ordered_parts).group_by(&:part_type_id).each do |t_id, cst_prts|
         puts "--cst_prts---> #{cst_prts}"
         parts[PartType.find(t_id).type_name] = cst_prts.map {|p| p.id.to_s + ' ' + p.name + ' ' + p.description}

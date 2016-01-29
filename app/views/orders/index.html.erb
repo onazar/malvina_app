@@ -12,6 +12,7 @@
     <th>Order parts</th>
     <th>Client name</th>
     <th>Client phone</th>
+    <th>TBD</th>
     <th></th>
     <th></th>
     <th></th>
@@ -28,6 +29,7 @@
       <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
       <td><%= ord.client_name %></td>
       <td><%= ord.client_phone %></td>
+      <td><%= ord.tbd %></td>
       <td><%= link_to 'Show', ord %></td>
       <td><%= link_to 'Edit', edit_order_path(ord) %></td>
       <td><%= link_to 'Destroy', ord, method: :delete, data: { confirm: 'Are you sure?' } %></td>
