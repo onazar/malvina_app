@@ -7,7 +7,7 @@ class Order < ActiveRecord::Base
 
   validates :return_date, presence: true
 
-  validates :days_in_rent, presence: true
+  #validates :days_in_rent, presence: true
 
   validates :name, presence: true, length: {maximum: 100}
 

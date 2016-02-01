@@ -19,10 +19,9 @@ class CostumesController < ApplicationController
     cst_names = []
     puts "-----> #{params}"
     if params.has_key?(:name_pattern) and params[:name_pattern] != ""
-      cst_names = Costume.where("name like ?", "%#{params[:name_pattern]}%").map {|n| n.name}
-    end
+      cst_names = Costume.where("name LIKE ?", "%#{params[:name_pattern]}%").map {|n| n.name}
 
-    if params.has_key?(:id_pattern) and !(Integer(params[:id_pattern]) rescue nil).nil?
+    elsif params.has_key?(:id_pattern) and !(Integer(params[:id_pattern]) rescue nil).nil?
       begin
         cst_names = [Costume.find(params[:id_pattern].to_i).name]
       rescue ActiveRecord::RecordNotFound
@@ -69,7 +68,7 @@ class CostumesController < ApplicationController
     end
 
     if request.xhr?
-      render :json => { :parts_for_costume => parts }
+      render :json => { :available_parts => parts }
     end
   end
 
