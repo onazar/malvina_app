@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   match '/', to: 'static_pages#home', via: 'get'
 
   resources :part_types
-  resources :parts
+
+  resources :parts do
+    get 'part_names', :on => :collection
+  end
+
   resources :costumes do
     get 'costume_names', :on => :collection
     get 'costume_parts', :on => :collection

@@ -31,7 +31,12 @@ class OrdersController < ApplicationController
   end
 
   def create
+    # Set from hidden tags because when element is disabled, rails doesn't send its value.
+    params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
+    params[:order][:order_type] = params[:h_order_type]
+    params[:order][:days_in_rent] = params[:h_days_in_rent]
+
     @order = Order.new(order_params)
 
     decode_and_create_new_ordered_parts_for_order
@@ -48,7 +53,11 @@ class OrdersController < ApplicationController
   end
 
   def update
+    # Set from hidden tags because when element is disabled, rails doesn't send its value.
+    params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
+    params[:order][:order_type] = params[:h_order_type]
+    params[:order][:days_in_rent] = params[:h_days_in_rent]
 
     @already_ord_parts = {}
     show_already_ordered_parts
@@ -84,14 +93,18 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:date, :days_in_rent, :return_date, :order_params, :order_type, :name, :client_name, :client_phone)
+    params.require(:order).permit(:date, :days_in_rent, :return_date, :order_params,
+                                  :order_type, :name, :client_name, :client_phone, :tbd)
+  end
+
+  def selected_date
+    # Make normal date YYYY-MM-DD.
+    Date.new params[:h_date_year].to_i, params[:h_date_month].to_i, params[:h_date_day].to_i
   end
 
   def set_return_date
     # Make return date base on selected date + number of days for rent
-    date = Date.new order_params["date(1i)"].to_i, order_params["date(2i)"].to_i, order_params["date(3i)"].to_i
-    new_date = date + order_params[:days_in_rent].to_i.days
-    new_date
+    selected_date + params[:h_days_in_rent].to_i.days
   end
 
   def show_already_ordered_parts

@@ -13,18 +13,11 @@
 
   <div class="field">
     <%= f.label :date %><br>
-    <%# if @chosen_date.nil? %>
-      <%#= f.date_select :date, selected: @order.date%>
-    <%# else%>
-      <%#= f.date_select :date, default: @chosen_date.to_date %>
-    <%# end%>
-    <% if @chosen_date.nil? and @order.date.nil? %>
-      <%= f.date_select :date, default: Date.today %>
-    <% elsif @chosen_date.nil? %>
-      <%= f.date_select :date, default: @order.date %>
-    <% else %>
+    <% if @chosen_date.nil? %>
+      <%= f.date_select :date, default: @order.date%>
+    <% else%>
       <%= f.date_select :date, default: @chosen_date.to_date %>
-    <% end %>
+    <% end%>
   </div>
 
   <div class="field">
@@ -37,12 +30,13 @@
 
   </div>
   <div id="ord_type_div", class="field">
+    <!--# Choose order type (costume or part).-->
     <%= f.label :order_type %><br>
     <% Order.order_types.keys.each do |ord_t| %>
       <%= f.radio_button :order_type, ord_t %>
       <%= f.label ord_t.to_sym %>
     <% end %>
-    <%#= f.select :order_type, Order.order_types.keys %>
+
     <!--# Choose search criteria (id or name pattern).-->
     </br>
     <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Id</label>
@@ -67,10 +61,19 @@
   <input type="text" id="rb_search" placeholder="Type to search" autocomplete="off">
 
   <div id="div_cst_names"></div>
-  <div id="div_cst_parts"></div>
+  <div id="div_parts"></div>
   <div id="div_selected_parts"></div>
 
+  <!--# Hidden tags.-->
+  <!--# Send selected parts.-->
   <%= hidden_field_tag 'sel_parts' %>
+
+  <!--# Send locked elements values.-->
+  <%= hidden_field_tag 'h_date_year' %>
+  <%= hidden_field_tag 'h_date_month' %>
+  <%= hidden_field_tag 'h_date_day' %>
+  <%= hidden_field_tag 'h_days_in_rent' %>
+  <%= hidden_field_tag 'h_order_type' %>
 
   <div class="field">
     <%= f.label :name %><br>
@@ -98,15 +101,23 @@
     if (document.getElementById("order_order_type_costume").checked == true) {
       return "<%= costume_names_costumes_path %>";
     } else if (document.getElementById("order_order_type_part").checked == true) {
-      return "<%= costume_names_costumes_path %>";
+      return "<%= part_names_parts_path %>";
     }
   }
 
   function dataSearchByAttr(val) {
     if (document.getElementById("item_id").checked == true) {
-      return { id_pattern: (val.length == 0) ? "" : val };
+      return { id_pattern : (val.length == 0) ? "" : val,
+               rent_days: $("#order_days_in_rent").val(),
+               ord_date: [$("#order_date_1i").val(),
+                          $("#order_date_2i").val(),
+                          $("#order_date_3i").val()] };
     } else if (document.getElementById("item_name").checked == true) {
-      return { name_pattern: (val.length == 0) ? "" : val };
+      return { name_pattern : (val.length == 0) ? "" : val,
+               rent_days: $("#order_days_in_rent").val(),
+               ord_date: [$("#order_date_1i").val(),
+                          $("#order_date_2i").val(),
+                          $("#order_date_3i").val()] };
     }
   }
 <% end %>
@@ -114,7 +125,7 @@
 
 <%= javascript_tag do %>
   $(document).on("keyup", '#rb_search', function() {
-    lockDateInstruments();
+    lockProperties();
 
     $.ajax({
       url: setSearchUrl(),
@@ -123,8 +134,7 @@
       data: dataSearchByAttr($(this).val()),
       complete: function() {},
       success: function(data, textStatus, xhr) {
-        // Do something with the response here
-        PrepareCostumesLi(data);
+        prepareBaseLi(data);
       },
       error: function() {
           alert("Ajax error!")
@@ -132,18 +142,27 @@
     });
   });
 
-  function PrepareCostumesLi(data) {
+  function prepareBaseLi(data) {
+    if ($("#rb_search").val() == "") {
+      $("#div_cst_names").html("");
+      $("#div_parts").html("");
+      $("#div_selected_parts").html("");
+      $("#sel_parts").attr("value", "");
+    }
+    else if ("cst_names" in data) {
+      prepareCostumesLi(data);
+    }
+    else if ("available_parts" in data) {
+      preparePartsLi(data)
+    }
+  }
+
+  function prepareCostumesLi(data) {
     var items = [];
     $.each(data.cst_names, function(index, value) {
       items.push("<li>" + value + "</li>");
     });
     $("#div_cst_names").html($("<ul/>", {html: items.join("")}));
-
-    if (items.length == 0) {
-      $("#div_cst_parts").html("");
-      $("#div_selected_parts").html("");
-      $("#sel_parts").attr("value", "");
-    }
   }
 
   $(document).on("click", '#div_cst_names ul li', function() {
@@ -159,8 +178,7 @@
             },
       complete: function() {},
       success: function(data, textStatus, xhr) {
-        // Do something with the response here
-        PrepareCostumeParts(data);
+        preparePartsLi(data);
       },
       error: function() {
         alert("Ajax error!")
@@ -168,9 +186,9 @@
     });
   });
 
-  function PrepareCostumeParts(data) {
+  function preparePartsLi(data) {
     var items = [];
-    $.each(data.parts_for_costume, function(p_type, parts) {
+    $.each(data.available_parts, function(p_type, parts) {
       items.push("<h3>" + p_type + "</h3>");
       items.push("<ul>");
       $.each(parts, function(index, value) {
@@ -179,10 +197,10 @@
       items.push("</ul>");
     });
 
-    if (items.length == 0) {
-      $("#div_cst_parts").html("No free parts for rent!!!");
+    if (items.length == 0) { // && $("rb_search").val() == "") {
+      $("#div_parts").html("No free parts for rent!!!");
     } else {
-      $("#div_cst_parts").html(items.join(""));
+      $("#div_parts").html(items.join(""));
     }
   }
 
@@ -190,10 +208,10 @@
 
 
 <%= javascript_tag do %>
-  $(document).on("click", '#div_cst_parts ul li', function() {
+  $(document).on("click", '#div_parts ul li', function() {
     var selectedParts = []
     $(this).toggleClass('selected');
-    $("#div_cst_parts ul li.selected").each(function(index, li) {
+    $("#div_parts ul li.selected").each(function(index, li) {
       selectedParts.push($(li).text());
     });
     $("#div_selected_parts").html(selectedParts.join(" ")).trigger("contentchange");
@@ -210,30 +228,43 @@
     }
 
     if (empty) {
-      $('.actions input').attr('disabled', 'disabled');
+      $(".actions input").attr("disabled", "disabled");
     } else {
-      $('.actions input').removeAttr('disabled');
+      $(".actions input").removeAttr("disabled");
     }
   });
 <% end %>
 
 <%= javascript_tag do %>
-  function lockDateInstruments() {
+  function lockProperties() {
     var lock = false;
     if ($("#rb_search").val().length != 0) {
       lock = true;
     }
 
     if (lock) {
+      setLockedValuesForHiddenFields();
+
+      $("#ord_type_div input").attr('disabled', 'disabled');
       $("#order_days_in_rent").attr('disabled', 'disabled');
       $("#order_date_1i").attr('disabled', 'disabled');
       $("#order_date_2i").attr('disabled', 'disabled');
       $("#order_date_3i").attr('disabled', 'disabled');
     } else {
+      $("#ord_type_div input").removeAttr('disabled');
       $("#order_days_in_rent").removeAttr('disabled');
       $("#order_date_1i").removeAttr('disabled');
       $("#order_date_2i").removeAttr('disabled');
       $("#order_date_3i").removeAttr('disabled');
     }
   }
+
+  function setLockedValuesForHiddenFields() {
+    $("#h_date_year").attr("value", $("#order_date_1i").val());
+    $("#h_date_month").attr("value", $("#order_date_2i").val());
+    $("#h_date_day").attr("value", $("#order_date_3i").val());
+    $("#h_days_in_rent").attr("value", $("#order_days_in_rent").val());
+    $("#h_order_type").attr("value", $("#ord_type_div input[type='radio'][name='order[order_type]']:checked").val());
+  }
+
 <% end %>
