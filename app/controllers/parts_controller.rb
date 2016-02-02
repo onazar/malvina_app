@@ -16,11 +16,8 @@ class PartsController < ApplicationController
   end
 
   def part_names
-    puts "-----> #{params}"
     ord_date = make_normal_date
     ret_date = set_return_date
-    puts "--ord_date---> #{ord_date}"
-    puts "--ret_date---> #{ret_date}"
 
     # Schema how to guess if parts are booked for these dates
     # 26.01---------28.01     28.01-------------31.01
@@ -33,14 +30,17 @@ class PartsController < ApplicationController
     # Get booked parts for clients dates
     ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
 
-    puts "--order_ids---> #{order_ids}"
-    puts "--ordered_parts---> #{ordered_parts}"
+    # While edit/update existed order, we show already exists parts for user
+    # in case he will remove them from selected list he can pick them up again,
+    # because they will be available for this order.
+    if params[:already_selected_parts_ids] != ""
+      ordered_parts = ordered_parts - ActiveSupport::JSON.decode(params[:already_selected_parts_ids])
+    end
 
     parts = {}
     if params.has_key?(:name_pattern) and params[:name_pattern] != ""
       # Get available parts by name pattern for client dates and group them by part types.
       Part.where("name LIKE ? AND id NOT IN (?)", "%#{params[:name_pattern]}%", ordered_parts.empty? ? [0] : ordered_parts).group_by(&:part_type_id).each do |t_id, prts|
-        puts "--prts---> #{prts}"
         parts[PartType.find(t_id).type_name] = prts.map {|p| p.id.to_s + ' ' + p.name + ' ' + p.description}
       end
     elsif params.has_key?(:id_pattern) and !(Integer(params[:id_pattern]) rescue nil).nil?
@@ -48,7 +48,6 @@ class PartsController < ApplicationController
       begin
         if !ordered_parts.include? params[:id_pattern].to_i
             prt = Part.find(params[:id_pattern])
-            puts "--prt---> #{prt}"
             parts[PartType.find(prt.part_type_id).type_name] = [prt.id.to_s + ' ' + prt.name + ' ' + prt.description]
         end
       rescue ActiveRecord::RecordNotFound

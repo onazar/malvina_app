@@ -14,7 +14,7 @@ class Order < ActiveRecord::Base
   validates :tbd, length: {maximum: 255}
 
   validates :client_name, presence: true, length: {maximum: 100}
-  validates :client_phone, presence: true, length: {maximum: 10}
+  validates :client_phone, presence: true, length: {is: 10}
 
   before_save {self.client_name = client_name.downcase}
 

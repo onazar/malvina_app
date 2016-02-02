@@ -26,8 +26,8 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @already_ord_parts = {}
-    show_already_ordered_parts
+    @already_ord_parts = jsoned_already_ordered_parts
+    @already_ord_parts_ids = jsoned_already_ordered_parts_ids
   end
 
   def create
@@ -59,8 +59,8 @@ class OrdersController < ApplicationController
     params[:order][:order_type] = params[:h_order_type]
     params[:order][:days_in_rent] = params[:h_days_in_rent]
 
-    @already_ord_parts = {}
-    show_already_ordered_parts
+    @already_ord_parts = jsoned_already_ordered_parts
+    @already_ord_parts_ids = jsoned_already_ordered_parts_ids
 
     @order.ordered_parts.destroy_all
 
@@ -107,11 +107,14 @@ class OrdersController < ApplicationController
     selected_date + params[:h_days_in_rent].to_i.days
   end
 
-  def show_already_ordered_parts
-    # Shows already ordered parts for selected order
-    ordered_parts = @order.ordered_parts.map {|i| [PartType.find(Part.find(i.ordered_part_id).part_type_id).type_name,
-                                                   i.ordered_part_id.to_s + ' ' + Part.find(i.ordered_part_id).name + ' ' + Part.find(i.ordered_part_id).description]}
-    ordered_parts.each {|k,v| @already_ord_parts.has_key?(k) ? @already_ord_parts[k] << v : @already_ord_parts[k] = [v]}
+  def jsoned_already_ordered_parts
+    # Returns already ordered parts for selected order as [].to_json
+    @order.ordered_parts.map {|i| i.ordered_part_id.to_s + ' ' + Part.find(i.ordered_part_id).name + ' ' + Part.find(i.ordered_part_id).description}.to_json
+  end
+
+  def jsoned_already_ordered_parts_ids
+    # Returns already ordered parts ids for selected order as [].to_json
+    @order.ordered_parts.pluck(:ordered_part_id).to_json
   end
 
   def decode_and_create_new_ordered_parts_for_order

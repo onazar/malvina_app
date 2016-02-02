@@ -35,11 +35,8 @@ class CostumesController < ApplicationController
   end
 
   def costume_parts
-    puts "-----> #{params}"
     ord_date = make_normal_date
     ret_date = set_return_date
-    puts "--ord_date---> #{ord_date}"
-    puts "--ret_date---> #{ret_date}"
 
     # Schema how to guess if parts are booked for these dates
     # 26.01---------28.01     28.01-------------31.01
@@ -52,8 +49,12 @@ class CostumesController < ApplicationController
     # Get booked parts for clients dates
     ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
 
-    puts "--order_ids---> #{order_ids}"
-    puts "--ordered_parts---> #{ordered_parts}"
+    # While edit/update existed order, we show already exists parts for user
+    # in case he will remove them from selected list he can pick them up again,
+    # because they will be available for this order.
+    if params[:already_selected_parts_ids] != ""
+      ordered_parts = ordered_parts - ActiveSupport::JSON.decode(params[:already_selected_parts_ids])
+    end
 
     parts = {}
     if params[:costume_name]
@@ -62,7 +63,6 @@ class CostumesController < ApplicationController
 
       # Get available costume parts for client dates and group them by part types.
       Costume.find(cst_id).parts.where("id NOT IN (?)", ordered_parts.empty? ? [0] : ordered_parts).group_by(&:part_type_id).each do |t_id, cst_prts|
-        puts "--cst_prts---> #{cst_prts}"
         parts[PartType.find(t_id).type_name] = cst_prts.map {|p| p.id.to_s + ' ' + p.name + ' ' + p.description}
       end
     end
