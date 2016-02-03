@@ -1,9 +1,15 @@
-<h1>Sample App</h1>
-<p>
-  This is the home page.
-</p>
+<h1 align="center">Malvina</h1>
 
 <p id="notice"><%= flash[:notice] %></p>
+<p id="alert"><%= flash[:alert] %></p>
+
+<div id="menu">
+  <%= link_to 'Orders', orders_url %> |
+  <%= link_to 'Costumes', costumes_url %> |
+  <%= link_to 'Parts', parts_url %> |
+  <%= link_to 'Part types', part_types_url %>
+</div>
+
 
 <div id="calendar">
   <h2 id="month">
