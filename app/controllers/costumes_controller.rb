@@ -39,13 +39,19 @@ class CostumesController < ApplicationController
     ret_date = set_return_date
 
     # Schema how to guess if parts are booked for these dates
-    # 26.01---------28.01     28.01-------------31.01
+    #   26.01---------28.01
+    #                         28.01------30.01
+    # 25.01---27.01
     #         27.01----------------------30.01  <----- Parts already booked for these dates
-    #         27.01------28.01           30.01--31.01
+    #         27.01------28.01
+    #                    28.01-----29.01
+    #                              29.01--------31.01
+    #                                    30.01--31.01
+    # 26.01-------------------------------------31.01
 
     # Get order ids that match client dates
-    order_ids = Order.where("date <= ? AND return_date > ? OR date < ? AND return_date >= ?",
-                            ord_date, ord_date, ret_date, ret_date).pluck(:id)
+    order_ids = Order.where("(date >= ? AND date < ?) OR (return_date > ? AND return_date <= ?) OR (date < ? AND return_date > ?)",
+                            ord_date, ret_date, ord_date, ret_date, ord_date, ret_date).pluck(:id)
     # Get booked parts for clients dates
     ordered_parts = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
 

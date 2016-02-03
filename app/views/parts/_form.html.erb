@@ -11,6 +11,14 @@
     </div>
   <% end %>
 
+  <div>
+    <% if @part.id.nil? %>
+      <h4>Ідентифікатор нової частини буде - <%= Part.last.id + 1 %></h4>
+    <% else %>
+      <h4>Редагуємо частину з ідентифікатором - <%= @part.id %></h4>
+    <% end %>
+  </div>
+
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -21,7 +29,7 @@
   </div>
   <div class="field">
     <%= f.label :part_type_id %><br>
-    <%= f.collection_select :part_type_id, PartType.order(:id), :id, :type_name, :prompt => "Select part type" %>
+    <%= f.collection_select :part_type_id, PartType.order(:id), :id, :type_name, :prompt => "Оберіть тип частини" %>
   </div>
   <div class="actions">
     <%= f.submit %>

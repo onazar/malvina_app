@@ -1,6 +1,8 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  
+  before_action :check_if_selected_parts_not_already_ordered_for_create, only: :create
+  before_action :check_if_selected_parts_not_already_ordered_for_update, only: :update
+
   def index
     @orders = Order.all
   end
@@ -39,7 +41,7 @@ class OrdersController < ApplicationController
 
     @order = Order.new(order_params)
 
-    decode_and_create_new_ordered_parts_for_order
+    create_new_ordered_parts_for_order
 
     respond_to do |format|
       if @order.save && params[:sel_parts] != ""
@@ -64,7 +66,7 @@ class OrdersController < ApplicationController
 
     @order.ordered_parts.destroy_all
 
-    decode_and_create_new_ordered_parts_for_order
+    create_new_ordered_parts_for_order
 
     respond_to do |format|
       if @order.update(order_params) && params[:sel_parts] != ""
@@ -121,12 +123,54 @@ class OrdersController < ApplicationController
     @order.ordered_parts.pluck(:ordered_part_id).to_json
   end
 
-  def decode_and_create_new_ordered_parts_for_order
-    # Decode selected parts for order and create corresponding records
-    # in ordered_parts
+  def create_new_ordered_parts_for_order
+    # Create corresponding records in ordered_parts.
+    decoded_ordered_parts_ids.each {|p| @order.ordered_parts.new(ordered_part_id: p)}
+  end
+
+  def decoded_ordered_parts_ids
+    # Decode selected parts for order and return list of ids or empty list.
     if params[:sel_parts] != ""
-      part_ids = ActiveSupport::JSON.decode(params[:sel_parts]).map {|p| p.split(' ')[0]}
-      part_ids.each {|p| @order.ordered_parts.new(ordered_part_id: p)}
+      ActiveSupport::JSON.decode(params[:sel_parts]).map {|p| p.split(' ')[0].to_i}
+    else
+      []
+    end
+  end
+
+  def check_if_selected_parts_not_already_ordered_for_create
+    # Prevent booking of the same parts from different places simultaneously.
+    # Get order ids that match client dates
+    st_date = selected_date
+    fin_date = set_return_date
+    order_ids = Order.where("(date >= ? AND date < ?) OR (return_date > ? AND return_date <= ?) OR (date < ? AND return_date > ?)",
+                            st_date, fin_date, st_date, fin_date, st_date, fin_date).pluck(:id)
+    # Get booked parts ids for clients dates
+    ordered_parts_ids = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
+    puts "---1--> #{ordered_parts_ids}"
+    puts "---111--> #{decoded_ordered_parts_ids}"
+    if decoded_ordered_parts_ids.map {|i| ordered_parts_ids.include?(i) ? true : false}.any?
+      puts "--2---> #{ordered_parts_ids}"
+      redirect_to root_url, :flash => { :alert => "Somebody has already ordered these parts. Please try again." }
+    end
+  end
+
+  def check_if_selected_parts_not_already_ordered_for_update
+    # Prevent booking of the same parts from different places simultaneously.
+    # Get order ids that match client dates
+    st_date = selected_date
+    fin_date = set_return_date
+    order_ids = Order.where("(date >= ? AND date < ?) OR (return_date > ? AND return_date <= ?) OR (date < ? AND return_date > ?)",
+                            st_date, fin_date, st_date, fin_date, st_date, fin_date).pluck(:id)
+    # Get booked parts ids for clients dates
+    ordered_parts_ids = order_ids.map { |oi| OrderedPart.where(order_id: oi).pluck(:ordered_part_id) }.flatten
+    puts "---old--> #{ordered_parts_ids}"
+    puts "---dec--> #{decoded_ordered_parts_ids}"
+    puts "---@already_ord_parts_ids--> #{params[:already_selected_parts_ids]}"
+    ordered_parts_ids = ordered_parts_ids - ActiveSupport::JSON.decode(params[:already_selected_parts_ids])
+    puts "---new--> #{ordered_parts_ids}"
+    if decoded_ordered_parts_ids.map {|i| ordered_parts_ids.include?(i) ? true : false}.any?
+      puts "--2---> #{ordered_parts_ids}"
+      redirect_to root_url, :flash => { :alert => "Somebody has already ordered these parts. Please try again." }
     end
   end
 
