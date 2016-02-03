@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-
+  
   def index
     @orders = Order.all
   end
@@ -88,7 +88,11 @@ class OrdersController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_order
-    @order = Order.find(params[:id])
+    begin
+      @order = Order.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to root_url, :flash => { :notice => "Record not found in db. Please refresh page to make it up to date." }
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

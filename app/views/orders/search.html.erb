@@ -37,7 +37,7 @@
 
 <br />
 
-<%= link_to 'Home', '/' %>
+<%= link_to 'Home', root_url %>
 <% if @new_ord %>
   <%= link_to 'New Order', new_order_path(:chosen_date => params[:date]) %>
 <% end %>

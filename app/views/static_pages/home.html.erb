@@ -3,6 +3,8 @@
   This is the home page.
 </p>
 
+<p id="notice"><%= flash[:notice] %></p>
+
 <div id="calendar">
   <h2 id="month">
     <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
