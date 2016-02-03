@@ -234,25 +234,13 @@
     return array.indexOf(value) > -1;
   }
 
-  function removePartsConfirmation() {
-    var txt;
-    var r = confirm("Видалити цю частину костюма?");
-    if (r == true) {
-      txt = "You pressed OK!";
-    } else {
-      txt = "You pressed Cancel!";
-    }
-    document.getElementById("demo").innerHTML = txt;
-  }
-
   // Remove parts from selected parts list
   $(document).on("click", '#div_selected_parts ul li', function() {
     var selectedParts = $("#complete_selected_parts").val() == "" ? [] : JSON.parse($("#complete_selected_parts").val())
     $(this).toggleClass('selected');
     $("#div_selected_parts ul li.selected").each(function(index, li) {
       if (isInArray($(li).text(), selectedParts)) {
-        var r = confirm("Видалити цю частину костюма?");
-        if (r == true) {
+        if (confirm("Видалити цю частину костюма?") == true) {
           removeElementFromArray($(li).text(), selectedParts);
         }
       }

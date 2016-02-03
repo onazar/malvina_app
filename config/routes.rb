@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   #get 'static_pages/home'
-  match '/', to: 'static_pages#home', via: 'get'
+  #match '/', to: 'static_pages#home', via: 'get'
+  root to: 'static_pages#home'
 
   resources :part_types
 
