@@ -5,6 +5,7 @@ development:
   timeout: 5000
   username: malvina
   password: malvina
+
 test:
   adapter: postgresql
   database: malvina_test
@@ -15,8 +16,10 @@ test:
 
 production:
   adapter: postgresql
-  database: malvina_prod
+  encoding: unicode
   pool: 5
-  timeout: 5000
-  username: malvina
-  password: malvina
+  database: <%=ENV['OPENSHIFT_APP_NAME']%>
+  host: <%=ENV['OPENSHIFT_POSTGRESQL_DB_HOST']%>
+  port: <%=ENV['OPENSHIFT_POSTGRESQL_DB_PORT']%>
+  username: <%=ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME']%>
+  password: <%=ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD']%>
