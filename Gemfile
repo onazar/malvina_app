@@ -21,13 +21,13 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'rb-readline'
 
+# Use PostgreSQL as the database for Active Record
+gem 'pg'
+
 # Build calendar
 gem "watu_table_builder", :require => "table_builder"
 
 group :development, :test do
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
-
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -41,7 +41,6 @@ group :doc do
 end
 
 group :production do
-  gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
 end
 
