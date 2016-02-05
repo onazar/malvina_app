@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :date %><br>
+    <%= f.label "Дата" %><br>
     <% if @chosen_date.nil? %>
       <%= f.date_select :date, default: @order.date%>
     <% else %>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="field">
-    <%= f.label :days_in_rent %><br>
+    <%= f.label "К-ть днів" %><br>
     <% if @order.days_in_rent.nil? %>
       <%= f.number_field :days_in_rent, min: 1, step: 1, value: 1 %>
     <% else %>
@@ -31,18 +31,18 @@
 
   <div id="ord_type_div", class="field">
     <!--# Choose order type (costume or part).-->
-    <%= f.label :order_type %><br>
-    <% Order.order_types.keys.each do |ord_t| %>
-      <%= f.radio_button :order_type, ord_t %>
-      <%= f.label ord_t.to_sym %>
-    <% end %>
-    <!--# Choose search criteria (id or name pattern).-->
+    <label><b>Пошук по:</b></label><br>
+    <label for="costume"><input type="radio" name="order_types" id="order_order_type_costume" value="costume"/>Костюму</label>
+    <label for="part"><input type="radio" name="order_types" id="order_order_type_part" checked="checked" value="part"/>Частині</label>
     </br>
-    <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Id</label>
-    <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Name</label>
+    <!--# Choose search criteria (id or name pattern).-->
+    <label><b>та за:</b></label><br>
+    <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Ід</label>
+    <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Іменем</label>
+    </br>
   </div>
 
-  <input type="text" id="rb_search" placeholder="Type to search" autocomplete="off">
+  <input type="text" id="rb_search" placeholder="Поле пошуку" autocomplete="off">
 
   <div id="div_cst_names"></div>
   <div id="div_parts"></div>
@@ -65,30 +65,29 @@
   <%= hidden_field_tag 'h_date_month' %>
   <%= hidden_field_tag 'h_date_day' %>
   <%= hidden_field_tag 'h_days_in_rent' %>
-  <%= hidden_field_tag 'h_order_type' %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label "Назва замовлення" %><br>
     <%= f.text_field :name %>
   </div>
 
   <div class="field">
-    <%= f.label :client_name %><br>
+    <%= f.label "Клієнт" %><br>
     <%= f.text_field :client_name %>
   </div>
 
   <div class="field">
-    <%= f.label :client_phone %><br>
+    <%= f.label "Телефон" %><br>
     <%= f.text_field :client_phone %>
   </div>
 
   <div class="field">
-    <%= f.label :tbd %><br>
+    <%= f.label "Доробити" %><br>
     <%= f.text_field :tbd %>
   </div>
 
   <div class="actions">
-    <%= f.submit disabled: true %>
+    <%= f.submit "Зберегти", disabled: true %>
   </div>
 <% end %>
 
@@ -196,7 +195,7 @@
     });
 
     if (items.length == 0) { // && $("rb_search").val() == "") {
-      $("#div_parts").html("No free parts for rent!!!");
+      $("#div_parts").html("На обрані дати немає вільних частин!!!");
     } else {
       $("#div_parts").html(items.join(""));
     }
@@ -218,7 +217,7 @@
 
     // Prepare selected part items list "ul li".
     var part_items = []
-    part_items.push("<h3>Selected parts</h3>");
+    part_items.push("<h3>Обрані частини</h3>");
     part_items.push("<ul>");
     $.each(selectedParts, function(index, value) {
       part_items.push("<li>" + value + "</li>");
@@ -248,7 +247,7 @@
 
     // Prepare selected part items list "ul li".
     var part_items = []
-    part_items.push("<h3>Selected parts</h3>");
+    part_items.push("<h3>Обрані частини</h3>");
     part_items.push("<ul>");
     $.each(selectedParts, function(index, value) {
       part_items.push("<li>" + value + "</li>");
@@ -292,7 +291,6 @@
     $("#h_date_month").attr("value", $("#order_date_2i").val());
     $("#h_date_day").attr("value", $("#order_date_3i").val());
     $("#h_days_in_rent").attr("value", $("#order_days_in_rent").val());
-    $("#h_order_type").attr("value", $("#ord_type_div input[type='radio'][name='order[order_type]']:checked").val());
   }
 <% end %>
 
@@ -347,7 +345,7 @@
       // Show selected part items list "ul li" when user wants to edit/update existed order.
       var selectedParts = $("#complete_selected_parts").val() == "" ? [] : JSON.parse($("#complete_selected_parts").val())
       var part_items = []
-      part_items.push("<h3>Selected parts</h3>");
+      part_items.push("<h3>Обрані частини</h3>");
       part_items.push("<ul>");
       $.each(selectedParts, function(index, value) {
         part_items.push("<li>" + value + "</li>");

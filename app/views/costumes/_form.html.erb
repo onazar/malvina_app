@@ -13,25 +13,25 @@
 
   <div>
     <% if @costume.id.nil? %>
-      <h4>Ідентифікатор нового костюму буде - <%= Costume.last.id + 1 %></h4>
+      <h4>Ідентифікатор нового костюму буде - <%= Costume.last.nil? ? 1 : Costume.last.id + 1 %></h4>
     <% else %>
       <h4>Редагуємо костюм з ідентифікатором - <%= @costume.id %></h4>
     <% end %>
   </div>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label "Назва" %><br>
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :description %><br>
+    <%= f.label "Опис" %><br>
     <%= f.text_field :description %>
   </div>
   <div class="field">
-    <%= f.label :parts %><br>
+    <%= f.label "Частини костюма" %><br>
     <%= select_tag "costume_parts", options_from_collection_for_select(Part.all, 'id', 'name',@costume.parts.map{ |j| j.id }), :multiple => true %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Зберегти" %>
   </div>
 <% end %>

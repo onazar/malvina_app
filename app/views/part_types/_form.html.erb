@@ -11,11 +11,19 @@
     </div>
   <% end %>
 
+  <div>
+    <% if @part_type.id.nil? %>
+      <h4>Ідентифікатор нового типу для частин буде - <%= PartType.last.nil? ? 1 : PartType.last.id + 1 %></h4>
+    <% else %>
+      <h4>Редагуємо тип частини з ідентифікатором - <%= @part_type.id %></h4>
+    <% end %>
+  </div>
+
   <div class="field">
-    <%= f.label "Part type name" %><br>
+    <%= f.label "Тип частини" %><br>
     <%= f.text_field :type_name %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Зберегти"%>
   </div>
 <% end %>

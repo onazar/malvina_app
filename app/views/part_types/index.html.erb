@@ -1,9 +1,9 @@
-<h1>Part types</h1>
+<h1>Типи частин</h1>
 
 <table>
   <tr>
-    <th>id</th>
-    <th>part type</th>
+    <th>Ід</th>
+    <th>Тип</th>
     <th></th>
     <th></th>
   </tr>
@@ -12,8 +12,8 @@
       <tr>
         <td><%= pt.id %></td>
         <td><%= pt.type_name %></td>
-        <td><%= link_to 'Show', pt %></td>
-        <td><%= link_to 'Edit', edit_part_type_path(pt) %></td>
+        <td><%= link_to 'Показати', pt %></td>
+        <td><%= link_to 'Редагувати', edit_part_type_path(pt) %></td>
 
       </tr>
   <% end %>
@@ -21,6 +21,6 @@
 
 <br />
 
-<%= link_to 'New Part type', new_part_type_path %> |
-<%= link_to 'Parts', parts_path %> |
-<%= link_to 'Home', root_url %>
+<%= link_to 'Новий тип', new_part_type_path %> |
+<%= link_to 'Частини', parts_path %> |
+<%= link_to 'Календар', root_url %>

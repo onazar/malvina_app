@@ -37,11 +37,9 @@ ActiveRecord::Schema.define(version: 20160129135026) do
 
   create_table "orders", force: :cascade do |t|
     t.date     "date"
-    t.integer  "order_type",   default: 0
     t.string   "name"
-    t.integer  "client_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.date     "return_date"
     t.string   "client_name"
     t.string   "client_phone"

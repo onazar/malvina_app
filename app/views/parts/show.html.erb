@@ -1,20 +1,25 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Ід:</strong>
+  <%= @part.id %>
+</p>
+
+<p>
+  <strong>Назва:</strong>
   <%= @part.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong>Опис:</strong>
   <%= @part.description %>
 </p>
 
 <p>
-  <strong>Part type:</strong>
+  <strong>Тип частини:</strong>
   <%= @part.part_type.type_name %>
 </p>
 
-<%= link_to 'Edit', edit_part_path(@part) %> |
-<%= link_to 'Back', parts_path %> |
-<%= link_to 'Home', root_url %>
+<%= link_to 'Редагувати', edit_part_path(@part) %> |
+<%= link_to 'Назад', parts_path %> |
+<%= link_to 'Календар', root_url %>

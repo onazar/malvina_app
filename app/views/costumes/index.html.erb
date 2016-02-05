@@ -1,11 +1,11 @@
-<h1>Listing costumes</h1>
+<h1>Костюми</h1>
 
 <table>
   <tr>
-    <th>Id</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Parts</th>
+    <th>Ід</th>
+    <th>Назва</th>
+    <th>Опис</th>
+    <th>Частини</th>
     <th></th>
     <th></th>
   </tr>
@@ -16,8 +16,8 @@
       <td><%= cst.name %></td>
       <td><%= cst.description %></td>
       <td><%= cst.parts.map {|p| p.name} %></td>
-      <td><%= link_to 'Show', cst %></td>
-      <td><%= link_to 'Edit', edit_costume_path(cst) %></td>
+      <td><%= link_to 'Показати', cst %></td>
+      <td><%= link_to 'Редагувати', edit_costume_path(cst) %></td>
 
     </tr>
   <% end %>
@@ -25,7 +25,7 @@
 
 <br />
 
-<%= link_to 'New Costume', new_costume_path %> |
-<%= link_to 'Parts', parts_path %> |
-<%= link_to 'Part types', part_types_path %> |
-<%= link_to 'Home', root_url %>
+<%= link_to 'Новий костюм', new_costume_path %> |
+<%= link_to 'Частини', parts_path %> |
+<%= link_to 'Типи частин', part_types_path %> |
+<%= link_to 'Календар', root_url %>
