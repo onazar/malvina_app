@@ -1,0 +1,53 @@
+echo "------------------------"
+
+echo bundle exec rake db:drop
+
+echo "------------------------"
+
+bundle exec rake db:drop
+
+echo "------------------------"
+
+echo createdb -U malvina malvina_dev
+
+echo "------------------------"
+
+createdb -U malvina malvina_dev
+
+echo "------------------------"
+
+echo createdb -U malvina malvina_test
+
+echo "------------------------"
+
+createdb -U malvina malvina_test
+
+#echo "------------------------"
+
+#echo bundle exec rake db:structure:load
+
+#echo "------------------------"
+
+#bundle exec rake db:structure:load
+
+echo "------------------------"
+
+echo bundle exec rake db:migrate
+
+echo "------------------------"
+
+bundle exec rake db:migrate
+
+echo "------------------------"
+
+echo bundle exec rake db:test:prepare
+
+echo "------------------------"
+
+bundle exec rake db:test:prepare
+
+echo "------------------------"
+
+echo SUCCESS
+
+echo "========================"

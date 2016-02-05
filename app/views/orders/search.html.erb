@@ -1,18 +1,17 @@
-<h1>Listing Clients <%= @action %></h1>
+<h1>Замовлення <%= @action %></h1>
 
 <input type="text" id="search" placeholder="Type to search">
 <table id="s_table">
   <tr>
-    <th>Id</th>
-    <th>Date</th>
-    <th>Days in rent</th>
-    <th>Return Date</th>
-    <th>Order type</th>
-    <th>Order Name</th>
-    <th>Order parts</th>
-    <th>Client name</th>
-    <th>Client phone</th>
-    <th>TBD</th>
+    <th>Ід</th>
+    <th>Дата видачі</th>
+    <th>Днів в прокаті</th>
+    <th>Дата повернення</th>
+    <th>Назва замовлення</th>
+    <th>Обрані частини</th>
+    <th>Клієнт</th>
+    <th>Телефон</th>
+    <th>Доробити</th
     <th></th>
     <th></th>
   </tr>
@@ -23,23 +22,22 @@
       <td><%= ord.date %></td>
       <td><%= ord.days_in_rent %></td>
       <td><%= ord.return_date %></td>
-      <td><%= ord.order_type %></td>
       <td><%= ord.name %></td>
       <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
       <td><%= ord.client_name %></td>
       <td><%= ord.client_phone %></td>
       <td><%= ord.tbd %></td>
-      <td><%= link_to 'Edit', edit_order_path(ord) %></td>
-      <td><%= link_to 'Destroy', ord, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'Редагувати', edit_order_path(ord) %></td>
+      <td><%= link_to 'Знищити', ord, method: :delete, data: { confirm: 'Ви впевненні що хочете знищити це замовлення?' } %></td>
     </tr>
   <% end %>
 </table>
 
 <br />
 
-<%= link_to 'Home', root_url %> |
+<%= link_to 'Календар', root_url %> |
 <% if @new_ord %>
-  <%= link_to 'New Order', new_order_path(:chosen_date => params[:date]) %>
+  <%= link_to 'Нове замовлення', new_order_path(:chosen_date => params[:date]) %>
 <% end %>
 
 <%= javascript_tag do %>

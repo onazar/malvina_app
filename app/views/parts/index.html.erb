@@ -1,11 +1,11 @@
-<h1>Listing parts</h1>
+<h1>Частини</h1>
 
 <table>
   <tr>
-    <th>Id</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Part type</th>
+    <th>Ід</th>
+    <th>Назва</th>
+    <th>Опис</th>
+    <th>Тип частини</th>
     <th></th>
     <th></th>
     <th></th>
@@ -17,8 +17,8 @@
         <td><%= prt.name %></td>
         <td><%= prt.description %></td>
         <td><%= prt.part_type.type_name %></td>
-        <td><%= link_to 'Show', prt %></td>
-        <td><%= link_to 'Edit', edit_part_path(prt) %></td>
+        <td><%= link_to 'Показати', prt %></td>
+        <td><%= link_to 'Редагувати', edit_part_path(prt) %></td>
 
       </tr>
   <% end %>
@@ -26,7 +26,7 @@
 
 <br />
 
-<%= link_to 'New Part', new_part_path %> |
-<%= link_to 'Costumes', costumes_path %> |
-<%= link_to 'Part types', part_types_path %> |
-<%= link_to 'Home', root_url %>
+<%= link_to 'Нова частина', new_part_path %> |
+<%= link_to 'Костюми', costumes_path %> |
+<%= link_to 'Типи частин', part_types_path %> |
+<%= link_to 'Календар', root_url %>

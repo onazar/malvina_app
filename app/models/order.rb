@@ -1,8 +1,6 @@
 class Order < ActiveRecord::Base
   has_many :ordered_parts, dependent: :destroy
 
-  enum order_type: [:costume, :part]
-
   validates :date, presence: true
 
   validates :return_date, presence: true

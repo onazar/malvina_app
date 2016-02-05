@@ -14,11 +14,11 @@ class OrdersController < ApplicationController
     @new_ord = false
     if params[:date] then
       @orders = Order.all.where(:date => params[:date])
-      @action = "Orders for #{params[:date]}"
+      @action = "для видачі на #{params[:date]}"
       @new_ord = true
     elsif params[:return_date] then
       @orders = Order.all.where(:return_date => params[:return_date])
-      @action = "Returns for #{params[:return_date]}"
+      @action = "що мають бути повернуті #{params[:return_date]}"
     end
   end
 
@@ -36,7 +36,7 @@ class OrdersController < ApplicationController
     # Set from hidden tags because when element is disabled, rails doesn't send its value.
     params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
-    params[:order][:order_type] = params[:h_order_type]
+    #params[:order][:order_type] = params[:h_order_type]
     params[:order][:days_in_rent] = params[:h_days_in_rent]
 
     @order = Order.new(order_params)
@@ -58,7 +58,7 @@ class OrdersController < ApplicationController
     # Set from hidden tags because when element is disabled, rails doesn't send its value.
     params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
-    params[:order][:order_type] = params[:h_order_type]
+    #params[:order][:order_type] = params[:h_order_type]
     params[:order][:days_in_rent] = params[:h_days_in_rent]
 
     @already_ord_parts = jsoned_already_ordered_parts
@@ -99,8 +99,7 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:date, :days_in_rent, :return_date, :order_params,
-                                  :order_type, :name, :client_name, :client_phone, :tbd)
+    params.require(:order).permit(:date, :days_in_rent, :return_date, :name, :client_name, :client_phone, :tbd)
   end
 
   def selected_date

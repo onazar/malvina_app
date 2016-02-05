@@ -1,20 +1,20 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Costume:</strong>
+  <strong>Костюм:</strong>
   <%= @costume.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong>Опис:</strong>
   <%= @costume.description %>
 </p>
 
 <p>
-  <strong>Parts:</strong>
+  <strong>Частини:</strong>
   <%= @costume.parts.map {|p| p.name}%>
 </p>
 
-<%= link_to 'Edit', edit_costume_path(@costume) %> |
-<%= link_to 'Back', costumes_path %> |
-<%= link_to 'Home', root_url %>
+<%= link_to 'Редагувати', edit_costume_path(@costume) %> |
+<%= link_to 'Назад', costumes_path %> |
+<%= link_to 'Календар', root_url %>
