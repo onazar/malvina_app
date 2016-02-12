@@ -27,7 +27,7 @@ $(function() {
     }).hide();
   });
 
-  $('.table tbody tr').dblclick(function () {
+  $('.table tbody tr').click(function () {
     window.location.href = $(this).data('url');
   });
 });
