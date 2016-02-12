@@ -14,9 +14,9 @@
   <div class="field">
     <%= f.label "Дата" %><br>
     <% if @chosen_date.nil? %>
-      <%= f.date_select :date, default: @order.date%>
+      <%= f.date_select :date, default: @order.date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
     <% else %>
-      <%= f.date_select :date, default: @chosen_date.to_date %>
+      <%= f.date_select :date, default: @chosen_date.to_date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
     <% end %>
   </div>
 
@@ -87,7 +87,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Зберегти", disabled: true %>
+    <%= f.submit "Зберегти", disabled: true, :class => "btn btn-default" %>
   </div>
 <% end %>
 
@@ -304,12 +304,14 @@
 
     if (empty) {
       $(".actions input").attr("disabled", "disabled");
+      $(".actions input").attr("class", "btn btn-default");
       $("#div_selected_parts").hide();
       if ($("#already_selected_parts_ids").val().length == 0 && $("#rb_search").val().length == 0) {
         unlockCalendar();
       }
     } else {
       $(".actions input").removeAttr("disabled");
+      $(".actions input").attr("class", "btn btn-success");
       $("#div_selected_parts").show();
     }
   });
@@ -352,7 +354,7 @@
       });
       part_items.push("</ul>");
 
-      $("#div_selected_parts").html(part_items.join(" "))
+      $("#div_selected_parts").html(part_items.join(" ")).trigger("contentchange");
 
       // Enable submit button for edit/update purposes.
       $(".actions input").removeAttr("disabled");

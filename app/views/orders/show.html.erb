@@ -45,6 +45,4 @@
   <%= @order.tbd %>
 </p>
 
-<%= link_to 'Редагувати', edit_order_path(@order) %> |
-<%= link_to 'Назад', orders_url %> |
-<%= link_to 'Календар', root_url %> |
+<%= link_to 'Відміна', orders_url, { :class => "btn btn-warning" } %>

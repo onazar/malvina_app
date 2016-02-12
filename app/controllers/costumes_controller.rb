@@ -3,6 +3,8 @@ class CostumesController < ApplicationController
 
   def index
     @costumes = Costume.all
+    @page_name = "Костюми"
+    @link_to_new = "/costumes/new"
   end
 
   def show

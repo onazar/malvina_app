@@ -1,20 +1,8 @@
-<h1 align="center">Мальвіна</h1>
 
-<p id="notice"><%= flash[:notice] %></p>
-<p id="alert"><%= flash[:alert] %></p>
-
-<div id="menu">
-  <%= link_to 'Замовлення', orders_url %> |
-  <%= link_to 'Костюми', costumes_url %> |
-  <%= link_to 'Частини', parts_url %> |
-  <%= link_to 'Типи частин', part_types_url %>
-</div>
-
-
-<div id="calendar">
+<div id="calendar" class="container">
   <h2 id="month">
     <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
-    <%=h @date.strftime("%B %Y") %>
+    <%=h l(@date, format: "%B %Y") %>
     <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m") %>
   </h2>
   <%= calendar_for @orders, :year => @date.year, :month => @date.month, :first_day_of_week => 1 do |calendar| %>

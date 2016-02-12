@@ -1,3 +1,33 @@
 // Place all the styles related to the Orders controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.my-edit-icon {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.my-edit-icon:hover {
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  background-color: #337ab7 !important;
+}
+
+.my-delete-icon {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.my-delete-icon:hover {
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  background-color: #d43f3a !important;
+}
+
+.calendar-button {
+  color: #FFFFFF;
+}
+
+.calendar-button:hover {
+  color: #FFFFFF;
+}

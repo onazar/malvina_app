@@ -5,20 +5,21 @@ class OrdersController < ApplicationController
 
   def index
     @orders = Order.all
+    @page_name = "Замовлення"
+    @link_to_new = new_order_path
   end
 
   def show
   end
 
   def search
-    @new_ord = false
     if params[:date] then
       @orders = Order.all.where(:date => params[:date])
-      @action = "для видачі на #{params[:date]}"
-      @new_ord = true
+      @page_name = "Видача #{params[:date]}"
+      @link_to_new = new_order_path(:chosen_date => params[:date])
     elsif params[:return_date] then
       @orders = Order.all.where(:return_date => params[:return_date])
-      @action = "що мають бути повернуті #{params[:return_date]}"
+      @page_name = "Здача #{params[:return_date]}"
     end
   end
 
@@ -36,7 +37,6 @@ class OrdersController < ApplicationController
     # Set from hidden tags because when element is disabled, rails doesn't send its value.
     params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
-    #params[:order][:order_type] = params[:h_order_type]
     params[:order][:days_in_rent] = params[:h_days_in_rent]
 
     @order = Order.new(order_params)
@@ -58,7 +58,6 @@ class OrdersController < ApplicationController
     # Set from hidden tags because when element is disabled, rails doesn't send its value.
     params[:order][:date] = selected_date
     params[:order][:return_date] = set_return_date
-    #params[:order][:order_type] = params[:h_order_type]
     params[:order][:days_in_rent] = params[:h_days_in_rent]
 
     @already_ord_parts = jsoned_already_ordered_parts
