@@ -1,31 +1,25 @@
-<h1>Костюми</h1>
+<div class="container">
 
-<table>
-  <tr>
-    <th>Ід</th>
-    <th>Назва</th>
-    <th>Опис</th>
-    <th>Частини</th>
-    <th></th>
-    <th></th>
-  </tr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Назва</th>
+        <th>Опис</th>
+        <th>Частини</th>
+      </tr>
+    </thead>
 
-  <% @costumes.each do |cst| %>
-    <tr>
-      <td><%= cst.id %></td>
-      <td><%= cst.name %></td>
-      <td><%= cst.description %></td>
-      <td><%= cst.parts.map {|p| p.name} %></td>
-      <td><%= link_to 'Показати', cst %></td>
-      <td><%= link_to 'Редагувати', edit_costume_path(cst) %></td>
+    <tbody>
+    <% @costumes.each do |cst| %>
+      <tr data-url="<%=edit_costume_path(cst)%>">
+        <td><%= cst.id %></td>
+        <td><%= cst.name %></td>
+        <td><%= cst.description %></td>
+        <td><%= cst.parts.map {|p| p.name} %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 
-    </tr>
-  <% end %>
-</table>
-
-<br />
-
-<%= link_to 'Новий костюм', new_costume_path %> |
-<%= link_to 'Частини', parts_path %> |
-<%= link_to 'Типи частин', part_types_path %> |
-<%= link_to 'Календар', root_url %>
+</div>

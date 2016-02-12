@@ -3,6 +3,8 @@ class PartsController < ApplicationController
 
   def index
     @parts = Part.all
+    @page_name = "Частини"
+    @link_to_new = "/parts/new"
   end
 
   def show

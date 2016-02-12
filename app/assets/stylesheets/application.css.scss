@@ -13,7 +13,6 @@
  *= require_tree .
  *= require_self
  */
-
-/*body {*/
-    /*padding-top: 90px;*/
-/*}*/
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+@import "bootstrap";

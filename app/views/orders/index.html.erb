@@ -1,55 +1,35 @@
-<h1>Список замовлень</h1>
+<div class="container">
 
-<input type="text" id="search" placeholder="Пошук замовлення...">
-<table id="table">
-  <tr>
-    <th>Ід</th>
-    <th>Дата видачі</th>
-    <th>Днів в прокаті</th>
-    <th>Дата повернення</th>
-    <th>Назва замовлення</th>
-    <th>Обрані частини</th>
-    <th>Клієнт</th>
-    <th>Телефон</th>
-    <th>Доробити</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Дата видачі</th>
+        <th>Днів в прокаті</th>
+        <th>Дата повернення</th>
+        <th>Назва замовлення</th>
+        <th>Обрані частини</th>
+        <th>Клієнт</th>
+        <th>Телефон</th>
+        <th>Доробити</th>
+      </tr>
+    </thead>
 
-  <% @orders.each do |ord| %>
-    <tr>
-      <td><%= ord.id %></td>
-      <td><%= ord.date %></td>
-      <td><%= ord.days_in_rent %></td>
-      <td><%= ord.return_date %></td>
-      <td><%= ord.name %></td>
-      <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
-      <td><%= ord.client_name %></td>
-      <td><%= ord.client_phone %></td>
-      <td><%= ord.tbd %></td>
-      <td><%= link_to 'Показати', ord %></td>
-      <td><%= link_to 'Редагувати', edit_order_path(ord) %></td>
-      <td><%= link_to 'Знищити', ord, method: :delete, data: { confirm: 'Ви впевненні що хочете знищити це замовлення?' } %></td>
+    <tbody>
+    <% @orders.each do |ord| %>
+      <tr data-url="<%=edit_order_path(ord)%>">
+        <td><%= ord.id %></td>
+        <td><%= ord.date %></td>
+        <td><%= ord.days_in_rent %></td>
+        <td><%= ord.return_date %></td>
+        <td><%= ord.name %></td>
+        <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
+        <td><%= ord.client_name %></td>
+        <td><%= ord.client_phone %></td>
+        <td><%= ord.tbd %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 
-    </tr>
-  <% end %>
-</table>
-
-<br />
-
-<%= link_to 'Нове замовлення', new_order_path %> |
-<%= link_to 'Календар', root_url %>
-
-
-<%= javascript_tag do %>
-  var $rows = $('#table tr');
-  $('#search').keyup(function() {
-  var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-
-  $rows.show().filter(function() {
-  var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-  return !~text.indexOf(val);
-  }).hide();
-  });
-<% end%>
+</div>

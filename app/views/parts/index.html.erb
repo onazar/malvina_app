@@ -1,32 +1,26 @@
-<h1>Частини</h1>
+<div class="container">
 
-<table>
-  <tr>
-    <th>Ід</th>
-    <th>Назва</th>
-    <th>Опис</th>
-    <th>Тип частини</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-  <% @parts.each do |prt| %>
+  <table class="table table-striped">
+    <thead>
       <tr>
+        <th>#</th>
+        <th>Назва</th>
+        <th>Опис</th>
+        <th>Тип частини</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <% @parts.each do |prt| %>
+      <tr data-url="<%=edit_part_path(prt)%>">
         <td><%= prt.id %></td>
         <td><%= prt.name %></td>
         <td><%= prt.description %></td>
         <td><%= prt.part_type.type_name %></td>
-        <td><%= link_to 'Показати', prt %></td>
-        <td><%= link_to 'Редагувати', edit_part_path(prt) %></td>
-
       </tr>
-  <% end %>
-</table>
+    <% end %>
+    </tbody>
+  </table>
 
-<br />
+</div>
 
-<%= link_to 'Нова частина', new_part_path %> |
-<%= link_to 'Костюми', costumes_path %> |
-<%= link_to 'Типи частин', part_types_path %> |
-<%= link_to 'Календар', root_url %>

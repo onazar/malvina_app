@@ -2,5 +2,6 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Відміна', orders_url %> |
-<%= link_to 'Календар', root_url %>
+<%= link_to 'Відміна', orders_url, { :class => "btn btn-warning" } %>
+<%= link_to 'Календар', root_url, { :class => "btn btn-primary" } %>
+<%= link_to 'Видалити', @order, method: :delete, data: { confirm: 'Ви впевненні що хочете знищити це замовлення?'}, :class => "btn btn-danger" %>
