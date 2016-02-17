@@ -2,15 +2,17 @@
 <div id="calendar" class="container">
   <h2 id="month">
     <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
-    <%=h l(@date, format: "%B %Y") %>
+    <b><%=h l(@date, format: "%B %Y") %></b>
     <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m") %>
   </h2>
   <%= calendar_for @orders, :year => @date.year, :month => @date.month, :first_day_of_week => 1 do |calendar| %>
     <%= calendar.head("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя") %>
     <% calendar.day(:day_method => :date) do |date, orders| %>
       <%= date.day %>
-      <ul><%= link_to h(orders.length), search_orders_path(:date => date)%></ul>
-      <ul><%= link_to h(@orders.where(return_date: date).length), search_orders_path(:return_date => date) %></ul>
+      <a href="<%= search_orders_path(:return_date => date) %>" class="btn btn-danger malvina-action-button">Здати <span class="badge"><%= h(@orders.where(return_date: date).length) %></span></a>
+      <br>
+      <br>
+      <a href="<%= search_orders_path(:date => date) %>" class="btn btn-success malvina-action-button">Видати <span class="badge"><%= h(orders.length) %></span></a>
     <% end %>
   <% end %>
 </div>

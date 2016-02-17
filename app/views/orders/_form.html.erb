@@ -11,84 +11,145 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= f.label "Дата" %><br>
-    <% if @chosen_date.nil? %>
-      <%= f.date_select :date, default: @order.date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
-    <% else %>
-      <%= f.date_select :date, default: @chosen_date.to_date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
-    <% end %>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Дані клієнта</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <%= f.label "Назва замовлення" %><br>
+            <%= f.text_field :name %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Клієнт" %><br>
+            <%= f.text_field :client_name %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Телефон" %><br>
+            <%= f.text_field :client_phone %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Доробити" %><br>
+            <%= f.text_field :tbd %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Бронь" %><br>
+            <%= f.text_field :reservation_fee %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Завдаток" %><br>
+            <%= f.text_field :deposit_fee %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label "Вартість прокату" %><br>
+            <%= f.text_field :rent_fee %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Пошук частин</div>
+          <div class="panel-body">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label "Дата" %><br>
+                <% if @chosen_date.nil? %>
+                  <%= f.date_select :date, default: @order.date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
+                <% else %>
+                  <%= f.date_select :date, default: @chosen_date.to_date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
+                <% end %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label "К-ть днів" %><br>
+                <% if @order.days_in_rent.nil? %>
+                  <%= f.number_field :days_in_rent, min: 1, step: 1, value: 1 %>
+                <% else %>
+                  <%= f.number_field :days_in_rent, min: 1, step: 1, value: @order.days_in_rent %>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div id="ord_type_div", class="form-group">
+                <!--# Choose order type (costume or part).-->
+                <label><b>Пошук по:</b></label><br>
+                <label for="costume"><input type="radio" name="order_types" id="order_order_type_costume" value="costume"/>Костюму</label>
+                <label for="part"><input type="radio" name="order_types" id="order_order_type_part" checked="checked" value="part"/>Частині</label>
+                </br>
+                <!--# Choose search criteria (id or name pattern).-->
+                <label><b>та за:</b></label><br>
+                <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Ід</label>
+                <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Іменем</label>
+                </br>
+              </div>
+
+              <input type="text" id="rb_search" placeholder="Поле пошуку" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Результат пошуку</div>
+          <div class="panel-body">
+            <div class="col-md-6">
+              <div id="div_cst_names"></div>
+            </div>
+            <div class="col-md-6">
+              <div id="div_parts"></div>
+
+              <!--# Hidden tags.-->
+              <!--# Send selected parts.-->
+              <% if @order.ordered_parts.nil? %>
+                <%= hidden_field_tag 'sel_parts' %>
+                <%= hidden_field_tag 'complete_selected_parts' %>
+                <%= hidden_field_tag 'already_selected_parts_ids' %>
+              <% else %>
+                <%= hidden_field_tag 'sel_parts', @already_ord_parts %>
+                <%= hidden_field_tag 'complete_selected_parts', @already_ord_parts %>
+                <%= hidden_field_tag 'already_selected_parts_ids', @already_ord_parts_ids %>
+              <% end %>
+
+              <!--# Send locked elements values.-->
+              <%= hidden_field_tag 'h_date_year' %>
+              <%= hidden_field_tag 'h_date_month' %>
+              <%= hidden_field_tag 'h_date_day' %>
+              <%= hidden_field_tag 'h_days_in_rent' %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+      <div class="panel panel-success">
+        <div class="panel-heading">Обрані частини</div>
+        <div class="panel-body">
+          <div id="div_selected_parts"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="form-group">
-    <%= f.label "К-ть днів" %><br>
-    <% if @order.days_in_rent.nil? %>
-      <%= f.number_field :days_in_rent, min: 1, step: 1, value: 1 %>
-    <% else %>
-      <%= f.number_field :days_in_rent, min: 1, step: 1, value: @order.days_in_rent %>
-    <% end %>
-  </div>
-
-  <div id="ord_type_div", class="form-group">
-    <!--# Choose order type (costume or part).-->
-    <label><b>Пошук по:</b></label><br>
-    <label for="costume"><input type="radio" name="order_types" id="order_order_type_costume" value="costume"/>Костюму</label>
-    <label for="part"><input type="radio" name="order_types" id="order_order_type_part" checked="checked" value="part"/>Частині</label>
-    </br>
-    <!--# Choose search criteria (id or name pattern).-->
-    <label><b>та за:</b></label><br>
-    <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Ід</label>
-    <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Іменем</label>
-    </br>
-  </div>
-
-  <input type="text" id="rb_search" placeholder="Поле пошуку" autocomplete="off">
-
-  <div id="div_cst_names"></div>
-  <div id="div_parts"></div>
-  <div id="div_selected_parts"></div>
-
-  <!--# Hidden tags.-->
-  <!--# Send selected parts.-->
-  <% if @order.ordered_parts.nil? %>
-    <%= hidden_field_tag 'sel_parts' %>
-    <%= hidden_field_tag 'complete_selected_parts' %>
-    <%= hidden_field_tag 'already_selected_parts_ids' %>
-  <% else %>
-    <%= hidden_field_tag 'sel_parts', @already_ord_parts %>
-    <%= hidden_field_tag 'complete_selected_parts', @already_ord_parts %>
-    <%= hidden_field_tag 'already_selected_parts_ids', @already_ord_parts_ids %>
-  <% end %>
-
-  <!--# Send locked elements values.-->
-  <%= hidden_field_tag 'h_date_year' %>
-  <%= hidden_field_tag 'h_date_month' %>
-  <%= hidden_field_tag 'h_date_day' %>
-  <%= hidden_field_tag 'h_days_in_rent' %>
-
-  <div class="form-group">
-    <%= f.label "Назва замовлення" %><br>
-    <%= f.text_field :name %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label "Клієнт" %><br>
-    <%= f.text_field :client_name %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label "Телефон" %><br>
-    <%= f.text_field :client_phone %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label "Доробити" %><br>
-    <%= f.text_field :tbd %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Зберегти", disabled: true, :class => "btn btn-default" %>
-    <%= link_to 'Відмінити', :back, { :class => "btn btn-default" } %>
+  <div class="panel-footer text-center">
+    <div class="actions">
+      <%= f.submit "Зберегти", disabled: true, :class => "btn btn-default" %>
+      <%= link_to 'Відмінити', :back, { :class => "btn btn-default" } %>
+      <%= link_to 'Видалити', @order, method: :delete, data: { confirm: 'Ви впевненні що хочете знищити це замовлення?'}, :class => "btn btn-danger malvina-action-button" %>
+    </div>
   </div>
 <% end %>
 
@@ -156,10 +217,12 @@
 
   function prepareCostumesLi(data) {
     var items = [];
+    items.push("<ul class='list-group'><b>Знайдені костюми</b>");
     $.each(data.cst_names, function(index, value) {
-      items.push("<li>" + value + "</li>");
+      items.push("<li class='list-group-item'>" + value + "</li>");
     });
-    $("#div_cst_names").html($("<ul/>", {html: items.join("")}));
+    items.push("</ul>");
+    $("#div_cst_names").html(items.join(""));
   }
 
   $(document).on("click", '#div_cst_names ul li', function() {
@@ -187,10 +250,9 @@
   function preparePartsLi(data) {
     var items = [];
     $.each(data.available_parts, function(p_type, parts) {
-      items.push("<h3>" + p_type + "</h3>");
-      items.push("<ul>");
+      items.push("<ul class='list-group'>" + "<b>" + p_type + "</b>");
       $.each(parts, function(index, value) {
-        items.push("<li>" + value + "</li>");
+        items.push("<li class='list-group-item'>" + value + "</li>");
       });
       items.push("</ul>");
     });
@@ -218,10 +280,9 @@
 
     // Prepare selected part items list "ul li".
     var part_items = []
-    part_items.push("<h3>Обрані частини</h3>");
-    part_items.push("<ul>");
+    part_items.push("<ul class='list-group'>");
     $.each(selectedParts, function(index, value) {
-      part_items.push("<li>" + value + "</li>");
+      part_items.push("<li class='list-group-item'>" + value + "</li>");
     });
     part_items.push("</ul>");
 
@@ -248,10 +309,9 @@
 
     // Prepare selected part items list "ul li".
     var part_items = []
-    part_items.push("<h3>Обрані частини</h3>");
-    part_items.push("<ul>");
+    part_items.push("<ul class='list-group'>");
     $.each(selectedParts, function(index, value) {
-      part_items.push("<li>" + value + "</li>");
+      part_items.push("<li class='list-group-item'>" + value + "</li>");
     });
     part_items.push("</ul>");
 
@@ -348,10 +408,9 @@
       // Show selected part items list "ul li" when user wants to edit/update existed order.
       var selectedParts = $("#complete_selected_parts").val() == "" ? [] : JSON.parse($("#complete_selected_parts").val())
       var part_items = []
-      part_items.push("<h3>Обрані частини</h3>");
-      part_items.push("<ul>");
+      part_items.push("<ul class='list-group'>");
       $.each(selectedParts, function(index, value) {
-        part_items.push("<li>" + value + "</li>");
+        part_items.push("<li class='list-group-item'>" + value + "</li>");
       });
       part_items.push("</ul>");
 
