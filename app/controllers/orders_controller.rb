@@ -101,7 +101,9 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:date, :days_in_rent, :return_date, :name, :client_name, :client_phone, :tbd)
+    params.require(:order).permit(:date, :days_in_rent, :return_date,
+                                  :name, :client_name, :client_phone,
+                                  :tbd, :reservation_fee, :deposit_fee, :rent_fee)
   end
 
   def selected_date

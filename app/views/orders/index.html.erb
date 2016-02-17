@@ -12,6 +12,10 @@
         <th>Клієнт</th>
         <th>Телефон</th>
         <th>Доробити</th>
+        <th>Бронь</th>
+        <th>Завдаток</th>
+        <th>Вартість прокату</th>
+        <th>Решта</th>
       </tr>
     </thead>
 
@@ -31,6 +35,10 @@
         <td><%= ord.client_name %></td>
         <td><%= ord.client_phone %></td>
         <td><%= ord.tbd %></td>
+        <td><%= ord.reservation_fee %></td>
+        <td><%= ord.deposit_fee %></td>
+        <td><%= ord.rent_fee %></td>
+        <td><%= ord.reservation_fee + ord.deposit_fee - ord.rent_fee %></td>
       </tr>
     <% end %>
     </tbody>

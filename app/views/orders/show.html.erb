@@ -1,7 +1,7 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
 
-  <div class="panel panel-success centering">
+  <div class="panel panel-order-show panel-success centering">
 
     <div class="panel-heading">Замовлення # <strong><%= @order.id %></strong></div>
 
@@ -51,6 +51,22 @@
           <th>Доробити:</th>
           <td><%= @order.tbd %></td>
         </tr>
+
+        <tr>
+          <th>Бронь:</th>
+          <td><%= @order.reservation_fee %></td>
+        </tr>
+
+        <tr>
+          <th>Завдаток:</th>
+          <td><%= @order.deposit_fee %></td>
+        </tr>
+
+        <tr>
+          <th>Вартість прокату:</th>
+          <td><%= @order.rent_fee %></td>
+        </tr>
+
       </table>
     </div>
 
