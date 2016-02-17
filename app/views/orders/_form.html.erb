@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Дата" %><br>
     <% if @chosen_date.nil? %>
       <%= f.date_select :date, default: @order.date, :use_month_names => ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'] %>
@@ -20,7 +20,7 @@
     <% end %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "К-ть днів" %><br>
     <% if @order.days_in_rent.nil? %>
       <%= f.number_field :days_in_rent, min: 1, step: 1, value: 1 %>
@@ -29,7 +29,7 @@
     <% end %>
   </div>
 
-  <div id="ord_type_div", class="field">
+  <div id="ord_type_div", class="form-group">
     <!--# Choose order type (costume or part).-->
     <label><b>Пошук по:</b></label><br>
     <label for="costume"><input type="radio" name="order_types" id="order_order_type_costume" value="costume"/>Костюму</label>
@@ -66,28 +66,29 @@
   <%= hidden_field_tag 'h_date_day' %>
   <%= hidden_field_tag 'h_days_in_rent' %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Назва замовлення" %><br>
     <%= f.text_field :name %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Клієнт" %><br>
     <%= f.text_field :client_name %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Телефон" %><br>
     <%= f.text_field :client_phone %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Доробити" %><br>
     <%= f.text_field :tbd %>
   </div>
 
   <div class="actions">
     <%= f.submit "Зберегти", disabled: true, :class => "btn btn-default" %>
+    <%= link_to 'Відмінити', :back, { :class => "btn btn-default" } %>
   </div>
 <% end %>
 

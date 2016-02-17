@@ -18,20 +18,24 @@
       <h4>Редагуємо костюм з ідентифікатором - <%= @costume.id %></h4>
     <% end %>
   </div>
-
+  <br>
   <div class="field">
     <%= f.label "Назва" %><br>
     <%= f.text_field :name %>
   </div>
+  <br>
   <div class="field">
     <%= f.label "Опис" %><br>
     <%= f.text_field :description %>
   </div>
+  <br>
   <div class="field">
     <%= f.label "Частини костюма" %><br>
     <%= select_tag "costume_parts", options_from_collection_for_select(Part.all, 'id', 'name',@costume.parts.map{ |j| j.id }), :multiple => true %>
   </div>
+  <br>
   <div class="actions">
-    <%= f.submit "Зберегти" %>
+    <%= f.submit "Зберегти", :class => "btn btn-success" %>
+    <%= link_to 'Відмінити', costumes_path, { :class => "btn btn-default" } %>
   </div>
 <% end %>

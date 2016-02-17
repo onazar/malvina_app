@@ -1,48 +1,64 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Ід:</strong>
-  <%= @order.id %>
-</p>
+  <div class="panel panel-success centering">
 
-<p>
-  <strong>Дата:</strong>
-  <%= @order.date %>
-</p>
+    <div class="panel-heading">Замовлення # <strong><%= @order.id %></strong></div>
 
-<p>
-  <strong>К-ть днів:</strong>
-  <%= @order.days_in_rent %>
-</p>
+    <div class="panel-body">
 
-<p>
-  <strong>Дата повернення:</strong>
-  <%= @order.return_date %>
-</p>
+      <table class="table table-striped">
+        <tr>
+          <th>Дата видачі:</th>
+          <td><%= @order.date %></td>
+        </tr>
 
-<p>
-  <strong>Назва замовлення:</strong>
-  <%= @order.name %>
-</p>
+        <tr>
+          <th>К-ть днів:</th>
+          <td><%=@order.days_in_rent%></td>
+        </tr>
 
-<p>
-  <strong>Замовлені частини:</strong>
-  <%= @order.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %>
-</p>
+        <tr>
+          <th>Дата повернення:</th>
+          <td><%=@order.return_date%></td>
+        </tr>
 
-<p>
-  <strong>Клієнт:</strong>
-  <%= @order.client_name %>
-</p>
+        <tr>
+          <th>Назва замовлення:</th>
+          <td><%=@order.name%></td>
+        </tr>
 
-<p>
-  <strong>Телефон:</strong>
-  <%= @order.client_phone %>
-</p>
+        <tr>
+          <th>Замовлені частини:</th>
+          <td>
+            <% @order.ordered_parts.each do |p| %>
+              <li><b><%= p.ordered_part_id.to_s %></b> <%= Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description %></li>
+            <% end %>
+          </td>
+        </tr>
 
-<p>
-  <strong>Доробити:</strong>
-  <%= @order.tbd %>
-</p>
+        <tr>
+          <th>Клієнт:</th>
+          <td><%=@order.client_name%></td>
+        </tr>
 
-<%= link_to 'Відміна', orders_url, { :class => "btn btn-warning" } %>
+        <tr>
+          <th>Телефон:</th>
+          <td><%= @order.client_phone %></td>
+        </tr>
+
+        <tr>
+          <th>Доробити:</th>
+          <td><%= @order.tbd %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="panel-footer text-center">
+      <%= link_to 'Редагувати', edit_order_url, { :class => "btn btn-warning malvina-action-button" } %>
+      <%= link_to 'Видалити', @order, method: :delete, data: { confirm: 'Ви впевненні що хочете знищити це замовлення?'}, :class => "btn btn-danger malvina-action-button" %>
+    </div>
+
+  </div>
+
+</div>

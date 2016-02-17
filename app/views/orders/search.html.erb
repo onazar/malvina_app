@@ -3,7 +3,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Ід</th>
+        <th>#</th>
         <th>Дата видачі</th>
         <th>Днів в прокаті</th>
         <th>Дата повернення</th>
@@ -16,14 +16,18 @@
     </thead>
 
     <tbody>
-    <% @orders.each do |ord| %>
-      <tr>
+    <% @orders.order('id DESC').each do |ord| %>
+      <tr data-url="<%=edit_order_path(ord)%>">
         <td><%= ord.id %></td>
         <td><%= ord.date %></td>
         <td><%= ord.days_in_rent %></td>
         <td><%= ord.return_date %></td>
         <td><%= ord.name %></td>
-        <td><%= ord.ordered_parts.map {|p| p.ordered_part_id.to_s + ' ' + Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description} %></td>
+        <td>
+          <% ord.ordered_parts.each do |p| %>
+            <li><b><%= p.ordered_part_id.to_s %></b> <%= Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description %></li>
+          <% end %>
+        </td>
         <td><%= ord.client_name %></td>
         <td><%= ord.client_phone %></td>
         <td><%= ord.tbd %></td>
@@ -31,7 +35,5 @@
     <% end %>
     </tbody>
   </table>
-
-<br />
 
 </div>

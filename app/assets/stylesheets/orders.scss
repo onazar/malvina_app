@@ -24,10 +24,25 @@
   background-color: #d43f3a !important;
 }
 
-.calendar-button {
-  color: #FFFFFF;
+.malvina-action-button {
+  color: #FFFFFF !important;
+  font-weight: bold !important;
 }
 
-.calendar-button:hover {
+.malvina-action-button:hover {
   color: #FFFFFF;
+  font-weight: bold;
+}
+
+.panel {
+  width: 500px;
+  margin: 20px;
+}
+.panel .dl-horizontal dt {
+  white-space: normal;
+}
+
+.centering {
+  float:none;
+  margin:0 auto;
 }
