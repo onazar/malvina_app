@@ -16,3 +16,7 @@
 // "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+input[type="radio"]{
+  margin: 0 0px 0 20px;
+}

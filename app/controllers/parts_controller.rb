@@ -4,7 +4,7 @@ class PartsController < ApplicationController
   def index
     @parts = Part.all
     @page_name = "Частини"
-    @link_to_new = "/parts/new"
+    @link_to_new = new_part_path
   end
 
   def show
@@ -12,9 +12,11 @@ class PartsController < ApplicationController
 
   def new
     @part = Part.new
+    @page_name = "Нова частина"
   end
 
   def edit
+    @page_name = "Редагуємо частину"
   end
 
   def part_names
@@ -74,11 +76,9 @@ class PartsController < ApplicationController
 
     respond_to do |format|
       if @part.save
-        format.html { redirect_to @part, notice: 'Part was successfully created.' }
-        format.json { render :show, status: :created, location: @part }
+        format.html { redirect_to action: "index", notice: 'Part was successfully created.' }
       else
         format.html { render :new }
-        format.json { render json: @part.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -86,11 +86,9 @@ class PartsController < ApplicationController
   def update
     respond_to do |format|
       if @part.update(part_params)
-        format.html { redirect_to @part, notice: 'Part was successfully updated.' }
-        format.json { render :show, status: :ok, location: @part }
+        format.html { redirect_to action: "index", notice: 'Part was successfully updated.' }
       else
         format.html { render :edit }
-        format.json { render json: @part.errors, status: :unprocessable_entity }
       end
     end
   end

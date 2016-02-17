@@ -11,7 +11,7 @@
     </thead>
 
     <tbody>
-    <% @costumes.each do |cst| %>
+    <% @costumes.order('id DESC').each do |cst| %>
       <tr data-url="<%=edit_costume_path(cst)%>">
         <td><%= cst.id %></td>
         <td><%= cst.name %></td>

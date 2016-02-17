@@ -5,7 +5,7 @@ class Order < ActiveRecord::Base
 
   validates :return_date, presence: true
 
-  validates :days_in_rent, presence: true
+  validates :days_in_rent, presence: true, :inclusion => { :in => 1..100, :message => "Невірне значення для 'К-ть днів в прокаті'. Дозволено від 1 до 100 днів " }
 
   validates :name, presence: true, length: {maximum: 100}
 

@@ -18,12 +18,14 @@
       <h4>Редагуємо тип частини з ідентифікатором - <%= @part_type.id %></h4>
     <% end %>
   </div>
-
+  <br>
   <div class="field">
     <%= f.label "Тип частини" %><br>
     <%= f.text_field :type_name %>
   </div>
+  <br>
   <div class="actions">
-    <%= f.submit "Зберегти"%>
+    <%= f.submit "Зберегти", :class => "btn btn-success" %>
+    <%= link_to 'Відмінити', part_types_path, { :class => "btn btn-default" } %>
   </div>
 <% end %>

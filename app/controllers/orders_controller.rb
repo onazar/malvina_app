@@ -10,6 +10,7 @@ class OrdersController < ApplicationController
   end
 
   def show
+    @page_name = "Сформоване Замовлення"
   end
 
   def search
@@ -26,11 +27,13 @@ class OrdersController < ApplicationController
   def new
     @chosen_date = params[:chosen_date]
     @order = Order.new
+    @page_name = "Нове Замовлення"
   end
 
   def edit
     @already_ord_parts = jsoned_already_ordered_parts
     @already_ord_parts_ids = jsoned_already_ordered_parts_ids
+    @page_name = "Редагуємо Замовлення"
   end
 
   def create

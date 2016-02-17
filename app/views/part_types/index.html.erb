@@ -9,7 +9,7 @@
     </thead>
 
     <tbody>
-    <% @part_types.each do |pt| %>
+    <% @part_types.order('id DESC').each do |pt| %>
       <tr data-url="<%=edit_part_type_path(pt)%>">
         <td><%= pt.id %></td>
         <td><%= pt.type_name %></td>

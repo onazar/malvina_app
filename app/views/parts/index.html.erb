@@ -11,7 +11,7 @@
     </thead>
 
     <tbody>
-    <% @parts.each do |prt| %>
+    <% @parts.order('id DESC').each do |prt| %>
       <tr data-url="<%=edit_part_path(prt)%>">
         <td><%= prt.id %></td>
         <td><%= prt.name %></td>

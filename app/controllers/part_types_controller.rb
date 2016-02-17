@@ -4,7 +4,7 @@ class PartTypesController < ApplicationController
   def index
     @part_types = PartType.all
     @page_name = "Типи частин"
-    @link_to_new = "/part_types/new"
+    @link_to_new = new_part_type_path
   end
 
   def show
@@ -12,9 +12,11 @@ class PartTypesController < ApplicationController
 
   def new
     @part_type = PartType.new
+    @page_name = "Новий тип"
   end
 
   def edit
+    @page_name = "Редагуємо тип"
   end
 
   def create
@@ -22,11 +24,9 @@ class PartTypesController < ApplicationController
 
     respond_to do |format|
       if @part_type.save
-        format.html { redirect_to @part_type, notice: 'PartType was successfully created.' }
-        format.json { render :show, status: :created, location: @part_type }
+        format.html { redirect_to action: "index", notice: 'PartType was successfully created.' }
       else
         format.html { render :new }
-        format.json { render json: @part_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -34,11 +34,9 @@ class PartTypesController < ApplicationController
   def update
     respond_to do |format|
       if @part_type.update(part_type_params)
-        format.html { redirect_to @part_type, notice: 'PartType was successfully updated.' }
-        format.json { render :show, status: :ok, location: @part_type }
+        format.html { redirect_to action: "index", notice: 'PartType was successfully updated.' }
       else
         format.html { render :edit }
-        format.json { render json: @part_type.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -4,7 +4,7 @@ class CostumesController < ApplicationController
   def index
     @costumes = Costume.all
     @page_name = "Костюми"
-    @link_to_new = "/costumes/new"
+    @link_to_new = new_costume_path
   end
 
   def show
@@ -12,9 +12,11 @@ class CostumesController < ApplicationController
 
   def new
     @costume = Costume.new
+    @page_name = "Новий костюм"
   end
 
   def edit
+    @page_name = "Редагуємо костюм"
   end
 
   def costume_names
@@ -87,11 +89,9 @@ class CostumesController < ApplicationController
 
     respond_to do |format|
       if @costume.save
-        format.html { redirect_to @costume, notice: 'Costume was successfully created.' }
-        format.json { render :show, status: :created, location: @costume }
+        format.html { redirect_to action: "index", notice: 'Costume was successfully created.' }
       else
         format.html { render :new }
-        format.json { render json: @costume.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -103,11 +103,9 @@ class CostumesController < ApplicationController
 
     respond_to do |format|
       if @costume.update(costume_params)
-        format.html { redirect_to @costume, notice: 'Costume was successfully updated.' }
-        format.json { render :show, status: :ok, location: @costume }
+        format.html { redirect_to action: "index", notice: 'Costume was successfully updated.' }
       else
         format.html { render :edit }
-        format.json { render json: @costume.errors, status: :unprocessable_entity }
       end
     end
   end

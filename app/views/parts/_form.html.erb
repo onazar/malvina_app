@@ -18,20 +18,27 @@
       <h4>Редагуємо частину з ідентифікатором - <%= @part.id %></h4>
     <% end %>
   </div>
-
+  <br>
   <div class="field">
     <%= f.label "Частина" %><br>
     <%= f.text_field :name %>
   </div>
+  <br>
   <div class="field">
     <%= f.label "Опис" %><br>
     <%= f.text_field :description %>
   </div>
+  <br>
   <div class="field">
     <%= f.label "Тип частини" %><br>
-    <%= f.collection_select :part_type_id, PartType.order(:id), :id, :type_name, :prompt => "Оберіть тип частини" %>
+    <% PartType.all.each do |pt| %>
+      <%= f.radio_button :part_type_id, pt.id %>
+      <%= f.label :part_type_id, pt.type_name %>
+    <% end %>
   </div>
+  <br>
   <div class="actions">
-    <%= f.submit "Зберегти"%>
+    <%= f.submit "Зберегти", :class => "btn btn-success" %>
+    <%= link_to 'Відмінити', parts_path, { :class => "btn btn-default" } %>
   </div>
 <% end %>
