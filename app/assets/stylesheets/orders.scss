@@ -2,26 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.my-edit-icon {
+.my-glyph-icon {
+  color: grey !important;
   border: none !important;
   background-color: transparent !important;
 }
 
-.my-edit-icon:hover {
+.my-glyph-icon:hover {
   border: 1px solid transparent;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   background-color: #337ab7 !important;
-}
-
-.my-delete-icon {
-  border: none !important;
-  background-color: transparent !important;
-}
-
-.my-delete-icon:hover {
-  border: 1px solid transparent;
-  color: #FFFFFF;
-  background-color: #d43f3a !important;
 }
 
 .malvina-action-button {

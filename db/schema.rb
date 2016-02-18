@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217132608) do
+ActiveRecord::Schema.define(version: 20160218110612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20160217132608) do
   create_table "orders", force: :cascade do |t|
     t.date     "date"
     t.string   "name"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.date     "return_date"
     t.string   "client_name"
     t.string   "client_phone"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20160217132608) do
     t.integer  "reservation_fee"
     t.integer  "deposit_fee"
     t.integer  "rent_fee"
+    t.boolean  "rent_returned",   default: false
+    t.boolean  "in_rent",         default: false
   end
 
   create_table "part_types", force: :cascade do |t|

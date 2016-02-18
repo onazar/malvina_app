@@ -16,30 +16,86 @@
         <th>Завдаток</th>
         <th>Вартість прокату</th>
         <th>Решта</th>
+        <% if @rent_return %>
+          <th>Здати</th>
+        <% else %>
+          <th>Видати</th>
+        <% end %>
       </tr>
     </thead>
 
     <tbody>
-    <% @orders.order('id DESC').each do |ord| %>
-      <tr data-url="<%=edit_order_path(ord)%>">
-        <td><%= ord.id %></td>
-        <td><%= ord.date %></td>
-        <td><%= ord.days_in_rent %></td>
-        <td><%= ord.return_date %></td>
-        <td><%= ord.name %></td>
-        <td>
-          <% ord.ordered_parts.each do |p| %>
-            <li><b><%= p.ordered_part_id.to_s %></b> <%= Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description %></li>
-          <% end %>
-        </td>
-        <td><%= ord.client_name %></td>
-        <td><%= ord.client_phone %></td>
-        <td><%= ord.tbd %></td>
-        <td><%= ord.reservation_fee %></td>
-        <td><%= ord.deposit_fee %></td>
-        <td><%= ord.rent_fee %></td>
-        <td><%= ord.reservation_fee + ord.deposit_fee - ord.rent_fee %></td>
-      </tr>
+    <% if @rent_return %>
+      <% @orders.where(:in_rent => true).each do |ord| %>
+        <% if ord.rent_returned == false %>
+          <tr data-url="<%=edit_order_path(ord)%>">
+        <% elsif ord.rent_returned == true %>
+          <tr class="success">
+        <% end %>
+            <td><%= ord.id %></td>
+            <td><%= ord.date %></td>
+            <td><%= ord.days_in_rent %></td>
+            <td><%= ord.return_date %></td>
+            <td><%= ord.name %></td>
+            <td>
+              <% ord.ordered_parts.each do |p| %>
+                <li><b><%= p.ordered_part_id.to_s %></b> <%= Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description %></li>
+              <% end %>
+            </td>
+            <td><%= ord.client_name %></td>
+            <td><%= ord.client_phone %></td>
+            <td><%= ord.tbd %></td>
+            <td><%= ord.reservation_fee %></td>
+            <td><%= ord.deposit_fee %></td>
+            <td><%= ord.rent_fee %></td>
+            <td><%= ord.reservation_fee + ord.deposit_fee - ord.rent_fee %></td>
+            <% if ord.rent_returned == false %>
+              <td>
+                <%= link_to update_order_rent_returned_state_order_path(ord, return_date: ord.return_date), { :class => "btn btn-lg btn-primary my-glyph-icon" } do %>
+                  <span class="glyphicon glyphicon-log-in"></span>
+                <% end %>
+              </td>
+            <% else %>
+              <td></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+    <% else %>
+      <% @orders.each do |ord| %>
+        <% if ord.in_rent == false %>
+          <tr data-url="<%=edit_order_path(ord)%>">
+        <% elsif ord.in_rent == true %>
+          <tr class="success">
+        <% end %>
+            <td><%= ord.id %></td>
+            <td><%= ord.date %></td>
+            <td><%= ord.days_in_rent %></td>
+            <td><%= ord.return_date %></td>
+            <td><%= ord.name %></td>
+            <td>
+              <% ord.ordered_parts.each do |p| %>
+                <li><b><%= p.ordered_part_id.to_s %></b> <%= Part.find(p.ordered_part_id).name + ' ' + Part.find(p.ordered_part_id).description %></li>
+              <% end %>
+            </td>
+            <td><%= ord.client_name %></td>
+            <td><%= ord.client_phone %></td>
+            <td><%= ord.tbd %></td>
+            <td><%= ord.reservation_fee %></td>
+            <td><%= ord.deposit_fee %></td>
+            <td><%= ord.rent_fee %></td>
+            <td><%= ord.reservation_fee + ord.deposit_fee - ord.rent_fee %></td>
+            <% if ord.in_rent == false %>
+              <td>
+                <%= link_to update_order_in_rent_state_order_path(ord, date: ord.date), { :class => "btn btn-lg btn-primary my-glyph-icon" } do %>
+                  <span class="glyphicon glyphicon-log-out"></span>
+                <% end %>
+              </td>
+            <% else %>
+              <td></td>
+            <% end %>
+          </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>

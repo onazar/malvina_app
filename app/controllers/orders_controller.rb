@@ -1,5 +1,7 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy,
+                                   :update_order_in_rent_state,
+                                   :update_order_rent_returned_state]
   before_action :check_if_selected_parts_not_already_ordered_for_create, only: :create
   before_action :check_if_selected_parts_not_already_ordered_for_update, only: :update
 
@@ -14,13 +16,37 @@ class OrdersController < ApplicationController
   end
 
   def search
+    @rent_return = false
     if params[:date] then
-      @orders = Order.all.where(:date => params[:date])
+      @orders = Order.all.where(:date => params[:date]).order('id DESC')
       @page_name = "Видача #{params[:date]}"
       @link_to_new = new_order_path(:chosen_date => params[:date])
     elsif params[:return_date] then
-      @orders = Order.all.where(:return_date => params[:return_date])
+      @orders = Order.all.where(:return_date => params[:return_date]).order('id DESC')
       @page_name = "Здача #{params[:return_date]}"
+      @rent_return = true
+    end
+  end
+
+  def update_order_in_rent_state
+    @order.in_rent = true
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to search_orders_path(:date => params[:date]), notice: 'Order was successfully go in rent.' }
+      else
+        format.html { redirect_to search_orders_path(:date => params[:date]), warn: 'Order wasn\'t successfully go in rent.' }
+      end
+    end
+  end
+
+  def update_order_rent_returned_state
+    @order.rent_returned = true
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to search_orders_path(:return_date => params[:return_date]), notice: 'Order was successfully back from rent.' }
+      else
+        format.html { redirect_to search_orders_path(:return_date => params[:return_date]), warn: 'Order wasn\'t successfully back from rent.' }
+      end
     end
   end
 
