@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   resources :orders do
     get 'search', :on => :collection
+    get 'update_order_in_rent_state', :on => :member
+    get 'update_order_rent_returned_state', :on => :member
     #collection do
     #  get 'search'
     #end
