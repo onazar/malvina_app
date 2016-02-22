@@ -33,7 +33,7 @@
     <%= f.label "Тип частини" %><br>
     <% PartType.all.each do |pt| %>
       <%= f.radio_button :part_type_id, pt.id %>
-      <%= f.label :part_type_id, pt.type_name %>
+      <%= f.label "#{:part_type_id}_#{pt.id}", pt.type_name %>
     <% end %>
   </div>
   <br>
