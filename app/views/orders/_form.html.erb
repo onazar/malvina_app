@@ -80,16 +80,21 @@
             </div>
 
             <div class="col-md-6">
-              <div id="ord_type_div", class="form-group">
+              <div id="ord_type_div">
                 <!--# Choose order type (costume or part).-->
-                <label><b>Пошук по:</b></label><br>
-                <label for="costume"><input type="radio" name="order_types" id="order_order_type_costume" value="costume"/>Костюму</label>
-                <label for="part"><input type="radio" name="order_types" id="order_order_type_part" checked="checked" value="part"/>Частині</label>
-                </br>
+                <label><b>Пошук по:</b></label>
+                <input type="radio" name="order_types" id="order_order_type_costume" value="costume">
+                  <label for="order_order_type_costume">Костюму</label>
+                <input type="radio" name="order_types" id="order_order_type_part" checked="checked" value="part">
+                  <label for="order_order_type_part">Частині</label>
+              </div>
+              <div id="ord_crit_div">
                 <!--# Choose search criteria (id or name pattern).-->
-                <label><b>та за:</b></label><br>
-                <label for="id"><input type="radio" name="s_crit" id="item_id" value="id"/>Ід</label>
-                <label for="name"><input type="radio" name="s_crit" id="item_name" checked="checked" value="name"/>Іменем</label>
+                <label><b>та за:</b></label>
+                <input type="radio" name="s_crit" id="item_id" checked="checked" value="id">
+                  <label for="item_id">Ід</label>
+                <input type="radio" name="s_crit" id="item_name" value="name">
+                  <label for="item_name">Іменем</label>
                 </br>
               </div>
 
@@ -389,11 +394,13 @@
     if (lock) {
       lockCalendar();
       $("#ord_type_div input").attr('disabled', 'disabled');
+      $("#ord_crit_div input").attr('disabled', 'disabled');
     } else {
       if ($("#div_selected_parts li").length == 0 && $("#already_selected_parts_ids").val().length == 0) {
         unlockCalendar();
       }
       $("#ord_type_div input").removeAttr('disabled');
+      $("#ord_crit_div input").removeAttr('disabled');
     }
   }
 <% end %>

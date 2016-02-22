@@ -16,7 +16,11 @@
         <td><%= cst.id %></td>
         <td><%= cst.name %></td>
         <td><%= cst.description %></td>
-        <td><%= cst.parts.map {|p| p.name} %></td>
+        <td>
+          <% cst.parts.each do |p| %>
+            <dd><b><%= p.id.to_s %></b> <%= p.name %></dd>
+          <% end %>
+        </td>
       </tr>
     <% end %>
     </tbody>
